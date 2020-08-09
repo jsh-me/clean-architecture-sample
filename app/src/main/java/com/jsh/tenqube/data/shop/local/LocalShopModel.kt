@@ -1,8 +1,7 @@
 package com.jsh.tenqube.data.shop.local
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.*
+import com.jsh.tenqube.data.label.local.LocalLabelModel
 
 @Entity(tableName = "shopList")
 data class LocalShopModel constructor(

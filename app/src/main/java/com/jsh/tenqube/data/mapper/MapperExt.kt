@@ -58,6 +58,11 @@ fun LocalLabelModel.toLocalDomainLabel(): Label {
     return Label(this.id, this.name)
 }
 
+
+fun Label.toDataLocalLabelModel(): LocalLabelModel{
+    return LocalLabelModel(this.id, this.name)
+}
+
 fun LocalShopModel.toLocalDomainShop(): Shop{
     val tempList = listOf<String>("#cute", "#sexy")
     return Shop(this.id, this.shopName, this.shopUrl, tempList)
