@@ -24,19 +24,3 @@ fun bindShopRecyclerView(recyclerView: RecyclerView, shopList: List<Shop>?, labe
         recyclerView.adapter?.notifyDataSetChanged()
     Timber.e("first binding end!")
 }
-
-//@BindingAdapter("bindLabelList")
-//fun bindLabelRecycler(recyclerView: RecyclerView, labelList: Map<String, String>?){
-//    labelList?.let {
-//        val lm = LinearLayoutManager(recyclerView.context)
-//        val adapter = SubAdapter()
-//        recyclerView.layoutManager = lm
-//        recyclerView.adapter = adapter
-//        (recyclerView.adapter as SubAdapter).run {
-//            label = labelList.mapToList()
-//        }
-//    }
-//    recyclerView.adapter?.notifyDataSetChanged()
-//    Timber.e("second binding end!")
-
-//}

@@ -19,11 +19,7 @@ import com.jsh.tenqube.presentation.util.toValue
 import kotlinx.android.synthetic.main.item_shop_list.view.*
 import timber.log.Timber
 
-class MainAdapter(
-//    private val shop: List<Shop>,
-//    private val labelMap: Map<String, String>,
-//    private val context: Context
-):
+class MainAdapter:
 RecyclerView.Adapter<MainAdapter.Holder>() {
 
     var shop: List<Shop> = listOf()
@@ -43,7 +39,6 @@ RecyclerView.Adapter<MainAdapter.Holder>() {
     override fun getItemCount(): Int = shop.size
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-       // holder.bind(shop[position].name, shop[position].imgUrl, context)
         holder.shopName.text = shop[position].name
         holder.shopImage.toLoadUrl(shop[position].imgUrl)
         holder.shopImage.clipToOutline = true
@@ -53,20 +48,6 @@ RecyclerView.Adapter<MainAdapter.Holder>() {
         }
         Timber.e("label: ${labelMap.size} and shop: ${shop.size}")
     }
-
-
-//    inner class Holder(binding: ItemShopListBinding,
-////        itemView: ItemShopListBinding) : RecyclerView.ViewHolder(itemView) {
-////        fun bind(name: String, url: String, context: Context) {
-////            itemView.shopName.text = name
-////            itemView.shopImage.toLoadUrl(url)
-////            itemView.shopImage.clipToOutline = true
-////            itemView.subRecycler.run {
-////                adapter = SubAdapter()
-////                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-////            }
-////        }
-////    }
 
     inner class Holder(
         binding: ItemShopListBinding,
