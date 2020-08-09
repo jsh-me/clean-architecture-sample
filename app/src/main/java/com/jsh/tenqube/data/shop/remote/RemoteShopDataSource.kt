@@ -1,6 +1,7 @@
 package com.jsh.tenqube.data.shop.remote
 
 import com.jsh.tenqube.data.api.TenqubeService
+import com.jsh.tenqube.data.db.ShopAndAllLabels
 import com.jsh.tenqube.data.mapper.toDomainLabelList
 import com.jsh.tenqube.data.mapper.toDomainShopList
 import com.jsh.tenqube.data.shop.ShopDataSource
@@ -31,6 +32,10 @@ class RemoteShopDataSource @Inject constructor(
         }
     }
 
+    override suspend fun getShopAndAllLabels(): List<ShopAndAllLabels> {
+        throw UnsupportedOperationException("unsupported operation")
+    }
+
     override suspend fun getShop(id: String): Result<Shop> = withContext(ioDispatcher) {
         return@withContext try{
             tenqubeServiceData?.let{ shopList->
@@ -41,16 +46,24 @@ class RemoteShopDataSource @Inject constructor(
         } as Result<Shop>
     }
 
+    override suspend fun isShopDBEmpty(): Boolean {
+        throw UnsupportedOperationException("unsupported operation")
+    }
+
+    override suspend fun insertShop(shop: Shop) {
+        throw UnsupportedOperationException("unsupported operation")
+    }
+
     override suspend fun saveShop(shop: Shop) {
-        TODO("Not yet implemented")
+        throw UnsupportedOperationException("unsupported operation")
     }
 
     override suspend fun deleteShop(id: String) {
-        TODO("Not yet implemented")
+        throw UnsupportedOperationException("unsupported operation")
     }
 
     override suspend fun deleteAllShop() {
-        TODO("Not yet implemented")
+        throw UnsupportedOperationException("unsupported operation")
     }
 
     private fun cacheShops(results: List<Shop>){

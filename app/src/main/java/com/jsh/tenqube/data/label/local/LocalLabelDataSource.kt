@@ -4,6 +4,7 @@ import com.jsh.tenqube.data.label.LabelDataSource
 import com.jsh.tenqube.domain.Result
 import com.jsh.tenqube.domain.Result.*
 import com.jsh.tenqube.data.db.TenqubeDatabase
+import com.jsh.tenqube.data.mapper.toDataLocalLabelModel
 import com.jsh.tenqube.data.mapper.toLocalDomainLabelList
 import com.jsh.tenqube.domain.entity.Label
 import kotlinx.coroutines.CoroutineDispatcher
@@ -24,7 +25,15 @@ class LocalLabelDataSource @Inject constructor(
         }
     }
 
+    override suspend fun insertLabel(label: Label) {
+        database.labelDao().insertLabel(label.toDataLocalLabelModel())
+    }
+
     override suspend fun saveLabel(label: Label) {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun isLabelDBEmpty(): Boolean = withContext(ioDispatcher) {
+        return@withContext database.labelDao().isLabelDBEmpty() == 0
     }
 }

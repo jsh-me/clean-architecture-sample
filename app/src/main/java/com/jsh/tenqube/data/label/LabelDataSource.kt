@@ -9,4 +9,7 @@ interface LabelDataSource {
 
     suspend fun saveLabel(label: Label)
 
+    suspend fun insertLabel(label: Label)
+
+    suspend fun isLabelDBEmpty(): Boolean
 }

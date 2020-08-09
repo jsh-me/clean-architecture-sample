@@ -6,7 +6,7 @@ import com.jsh.tenqube.domain.entity.Label
 
 interface LabelRepository {
 
-    suspend fun getLabels(isUpdated: Boolean = false): Result<MutableMap<String, String>>
+    suspend fun getLabels(): Result<List<Label>>
 
     suspend fun saveLabel(label: Label)
 

@@ -20,8 +20,6 @@ class RemoteLabelDataSource @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ): LabelDataSource {
 
-   // private var tenqubeServiceData: ConcurrentMap<String, Shop>?= null
-
     override suspend fun getLabels(): Result<List<Label>> = withContext(ioDispatcher) {
         return@withContext try{
             Result.Success((tenqubeService.getLabels().results).toDomainLabelList())
@@ -31,15 +29,14 @@ class RemoteLabelDataSource @Inject constructor(
     }
 
     override suspend fun saveLabel(label: Label) {
-        TODO("Not yet implemented")
+        throw UnsupportedOperationException("unsupported operation")
     }
 
-    //    private fun cacheShops(results: List<Shop>){
-//        if(tenqubeServiceData == null){
-//            tenqubeServiceData = ConcurrentHashMap()
-//        }
-//        results.map{
-//            tenqubeServiceData?.put(it.id, it)
-//        }
-//    }
+    override suspend fun insertLabel(label: Label) {
+        throw UnsupportedOperationException("unsupported operation")
+    }
+
+    override suspend fun isLabelDBEmpty(): Boolean {
+        throw UnsupportedOperationException("unsupported operation")
+    }
 }
