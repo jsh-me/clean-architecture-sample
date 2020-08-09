@@ -3,6 +3,7 @@ package com.jsh.tenqube.presentation.di
 import com.jsh.tenqube.domain.repository.LabelRepository
 import com.jsh.tenqube.domain.repository.ShopRepository
 import com.jsh.tenqube.domain.usecase.GetLabelsUseCase
+import com.jsh.tenqube.domain.usecase.GetShopWithLabelsUseCase
 import com.jsh.tenqube.domain.usecase.GetShopsUseCase
 import dagger.Module
 import dagger.Provides
@@ -25,5 +26,11 @@ class UseCaseModule {
     @ActivityRetainedScoped
     fun getShopsUseCase(repo: ShopRepository): GetShopsUseCase {
         return GetShopsUseCase(repo)
+    }
+
+    @Provides
+    @ActivityRetainedScoped
+    fun getShopWIthLabelsUseCase(repo: ShopRepository): GetShopWithLabelsUseCase{
+        return GetShopWithLabelsUseCase(repo)
     }
 }
