@@ -8,8 +8,8 @@ import com.jsh.tenqube.domain.repository.ShopRepository
 class GetShopsUseCase (
     private val defaultRepository: ShopRepository
 ) {
-    suspend operator fun invoke(isUpdated: Boolean = false): Result<List<Shop>> {
-        return defaultRepository.getShops(isUpdated)
+    suspend operator fun invoke(): Result<List<Shop>> {
+        return defaultRepository.getShops()
     }
 
 }
