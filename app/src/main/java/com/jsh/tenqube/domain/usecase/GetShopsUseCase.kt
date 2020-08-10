@@ -11,5 +11,4 @@ class GetShopsUseCase (
     suspend operator fun invoke(): Result<List<Shop>> {
         return defaultRepository.getShops()
     }
-
 }

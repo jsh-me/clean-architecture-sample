@@ -3,12 +3,13 @@ package com.jsh.tenqube.presentation.binding
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.jsh.tenqube.domain.entity.Label
 import com.jsh.tenqube.domain.entity.Shop
 import com.jsh.tenqube.presentation.ui.MainAdapter
 import timber.log.Timber
 
 @BindingAdapter("bindShopList", "bindLabelList")
-fun bindShopRecyclerView(recyclerView: RecyclerView, shopList: List<Shop>?, labelList: Map<String, String>?){
+fun bindShopRecyclerView(recyclerView: RecyclerView, shopList: List<Shop>?, labelList: List<List<Label>>?){
     if(shopList != null && labelList != null) {
         val lm = LinearLayoutManager(recyclerView.context)
         val adapter = MainAdapter()

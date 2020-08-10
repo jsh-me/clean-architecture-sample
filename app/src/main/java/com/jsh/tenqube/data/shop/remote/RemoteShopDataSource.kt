@@ -1,12 +1,10 @@
 package com.jsh.tenqube.data.shop.remote
 
 import com.jsh.tenqube.data.api.TenqubeService
-import com.jsh.tenqube.data.db.ShopAndAllLabels
-import com.jsh.tenqube.data.mapper.toDomainLabelList
+import com.jsh.tenqube.data.db.LocalShopAndLabels
 import com.jsh.tenqube.data.mapper.toDomainShopList
 import com.jsh.tenqube.data.shop.ShopDataSource
 import com.jsh.tenqube.domain.Result
-import com.jsh.tenqube.domain.entity.Label
 import com.jsh.tenqube.domain.entity.Shop
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -32,9 +30,9 @@ class RemoteShopDataSource @Inject constructor(
         }
     }
 
-    override suspend fun getShopAndAllLabels(): List<ShopAndAllLabels> {
-        throw UnsupportedOperationException("unsupported operation")
-    }
+//    override suspend fun getShopAndAllLabels(): List<ShopAndAllLabels> {
+//        throw UnsupportedOperationException("unsupported operation")
+//    }
 
     override suspend fun getShop(id: String): Result<Shop> = withContext(ioDispatcher) {
         return@withContext try{
@@ -50,11 +48,11 @@ class RemoteShopDataSource @Inject constructor(
         throw UnsupportedOperationException("unsupported operation")
     }
 
-    override suspend fun insertShop(shop: Shop) {
+    override suspend fun insertShop(shop: Shop){
         throw UnsupportedOperationException("unsupported operation")
     }
 
-    override suspend fun saveShop(shop: Shop) {
+    override suspend fun saveShop(shop: Shop){
         throw UnsupportedOperationException("unsupported operation")
     }
 
@@ -66,6 +64,18 @@ class RemoteShopDataSource @Inject constructor(
         throw UnsupportedOperationException("unsupported operation")
     }
 
+//    override suspend fun getShopWithRestList(): List<ShopLabelWithLabelList> {
+//        throw UnsupportedOperationException("unsupported operation")
+//    }
+
+//    override suspend fun getShopWithAllLabelList(): List<ShopWithAllLabelList> {
+//        throw UnsupportedOperationException("unsupported operation")
+//    }
+
+    override suspend fun getShop(): List<LocalShopAndLabels> {
+        throw UnsupportedOperationException("unsupported operation")
+    }
+
     private fun cacheShops(results: List<Shop>){
         if(tenqubeServiceData == null){
             tenqubeServiceData = ConcurrentHashMap()
@@ -74,4 +84,5 @@ class RemoteShopDataSource @Inject constructor(
             tenqubeServiceData?.put(it.id, it)
         }
     }
+
 }

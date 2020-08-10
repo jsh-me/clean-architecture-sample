@@ -61,7 +61,7 @@ object AppModule {
             context.applicationContext,
             TenqubeDatabase::class.java,
             "tenqube.db"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 
     @Singleton

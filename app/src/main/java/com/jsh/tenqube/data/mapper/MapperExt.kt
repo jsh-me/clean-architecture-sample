@@ -26,9 +26,8 @@ fun List<LocalLabelModel>.toLocalDomainLabelList(): List<Label>{
 }
 
 fun List<LocalShopModel>.toLocalDomainShopList(): List<Shop>{
-    val tempList = listOf<String>("#cute", "#sexy")
     return this.map{
-        Shop(it.id, it.shopName, it.shopUrl, tempList)
+        Shop(it.id, it.shopName, it.shopUrl, arrayListOf("dkdk","sfds"))
     }
 }
 
@@ -60,7 +59,7 @@ fun LocalLabelModel.toLocalDomainLabel(): Label {
 
 
 fun Label.toDataLocalLabelModel(): LocalLabelModel{
-    return LocalLabelModel(this.id, this.name)
+    return LocalLabelModel("", this.id, this.name)
 }
 
 fun LocalShopModel.toLocalDomainShop(): Shop{
@@ -69,10 +68,11 @@ fun LocalShopModel.toLocalDomainShop(): Shop{
 }
 
 fun Shop.toLocalDataShopModel(): LocalShopModel {
-    return LocalShopModel(
-        this.id,
-        this.name,
-        this.imgUrl,
-        "tempList"
-    )
-}
+//    return LocalShopModel(
+//        this.id,
+//        this.name,
+//        this.imgUrl,
+//        "tempList"
+//    )
+    return LocalShopModel(id = this.id, shopName = this.name, shopUrl =  this.imgUrl)
+    }

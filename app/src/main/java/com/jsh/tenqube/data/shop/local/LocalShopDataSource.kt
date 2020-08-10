@@ -1,6 +1,6 @@
 package com.jsh.tenqube.data.shop.local
 
-import com.jsh.tenqube.data.db.ShopAndAllLabels
+import com.jsh.tenqube.data.db.LocalShopAndLabels
 import com.jsh.tenqube.data.mapper.*
 import com.jsh.tenqube.data.shop.ShopDataSource
 import com.jsh.tenqube.data.db.TenqubeDatabase
@@ -34,9 +34,6 @@ class LocalShopDataSource @Inject constructor(
         }
     }
 
-    override suspend fun getShopAndAllLabels(): List<ShopAndAllLabels> = withContext(ioDispatcher){
-        database.shopDao().getShopAndAllLabels()
-    }
 
     override suspend fun saveShop(shop: Shop) = withContext(ioDispatcher){
         database.shopDao().saveShop(shop.toLocalDataShopModel())
@@ -52,7 +49,23 @@ class LocalShopDataSource @Inject constructor(
         Timber.e("All Delete Completed")
     }
 
+    override suspend fun getShop(): List<LocalShopAndLabels>  = withContext(ioDispatcher) {
+        database.shopLabelDao().getShop()
+    }
+
+    //    override suspend fun getShopWithRestList(): List<ShopLabelWithLabelList> = withContext(ioDispatcher) {
+//        database.shopLabelDao().getShopWithLabelList()
+//    }
+
+//    override suspend fun getShopWithAllLabelList(): List<ShopWithAllLabelList> = withContext(ioDispatcher) {
+//        database.shopLabelDao().getShopWithAllLabelList()
+//    }
+
+    //shop , shoplabel
     override suspend fun insertShop(shop: Shop) = withContext(ioDispatcher) {
+//        shop.labelIds.map { labelId ->
+//            database.shopLabelDao().insertShopLabel(LocalShopLabelModel(shopId = shop.id, labelId = labelId))
+//        }
         database.shopDao().insertShop(shop.toLocalDataShopModel())
     }
 

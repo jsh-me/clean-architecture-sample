@@ -1,32 +1,30 @@
 package com.jsh.tenqube.data.shop.local
 
 import androidx.room.*
-import com.jsh.tenqube.data.db.ShopAndAllLabels
-import com.jsh.tenqube.data.label.local.LocalLabelModel
 
 @Dao
 interface ShopDao{
 
-    @Query("SELECT * FROM shopList")
+    @Query("SELECT * FROM shop")
     suspend fun getShops(): List<LocalShopModel>
 
-    @Transaction
-    @Query("SELECT * FROM shopList")
-    suspend fun getShopAndAllLabels(): List<ShopAndAllLabels>
+//    @Transaction
+//    @Query("SELECT * FROM shopList")
+//    suspend fun getShopAndAllLabels(): List<ShopToShopAndLabelList>
 
     @Insert
     suspend fun insertShop(shop: LocalShopModel)
 
-    @Query("SELECT * FROM shopList WHERE id= :shopId")
+    @Query("SELECT * FROM shop WHERE id= :shopId")
     suspend fun getShopById(shopId: String): LocalShopModel
 
-    @Query("DELETE FROM shopList WHERE id= :shopId")
+    @Query("DELETE FROM shop WHERE id= :shopId")
     suspend fun deleteShopById(shopId: String)
 
-    @Query("SELECT count(*) FROM shopList")
+    @Query("SELECT count(*) FROM shop")
     suspend fun isShopDBEmpty(): Int
 
-    @Query("DELETE FROM shopList")
+    @Query("DELETE FROM shop")
     suspend fun deleteAllShops()
 
     @Update

@@ -36,4 +36,20 @@ class LocalLabelDataSource @Inject constructor(
     override suspend fun isLabelDBEmpty(): Boolean = withContext(ioDispatcher) {
         return@withContext database.labelDao().isLabelDBEmpty() == 0
     }
+
+//    override suspend fun findLabelsByShopId(shopId: String): Result<List<Label>> = withContext(ioDispatcher) {
+//        return@withContext try {
+//        Success(database.labelDao().findLabelsByShopId(shopId).toLocalDomainLabelList())
+//        } catch (e: Exception) {
+//            Error(e)
+//        }
+//    }
+//
+//    override suspend fun findLabelsByShopName(shopName: String): Result<List<Label>> = withContext(ioDispatcher) {
+//        return@withContext try{
+//            Success(database.labelDao().findLabelsByShopName(shopName).toLocalDomainLabelList())
+//        } catch (e: Exception) {
+//            Error(e)
+//        }
+//    }
 }

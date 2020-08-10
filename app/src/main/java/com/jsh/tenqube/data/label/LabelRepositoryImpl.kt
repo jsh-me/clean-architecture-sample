@@ -15,22 +15,6 @@ class LabelRepositoryImpl @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ): LabelRepository {
 
-//    override suspend fun getLabels(): Result<MutableMap<String, String>> =
-//        withContext(ioDispatcher) {
-//            if(localDataSource.isLabelDBEmpty()){
-//            remoteDataSource.getLabels().let { result ->
-//                if (result is Result.Success) {
-//                    result.data.map { label ->
-//                        cacheList(label)
-//                    }
-//                }
-//                return@withContext Result.Success(cachedLabelList)
-//            }
-//            }
-//
-//            //  val newShopsAndLabels = fetchListFromRemoteOrLocal(isUpdated)
-//        }
-
     override suspend fun getLabels(): Result<List<Label>> = withContext(ioDispatcher) {
         if(localDataSource.isLabelDBEmpty()){ //room db 갯수 여부, 비어있으면 remote 로 불러오기
             Timber.e("remoteDataSource label available")
@@ -62,6 +46,24 @@ class LabelRepositoryImpl @Inject constructor(
     override suspend fun saveLabel(label: Label) {
         TODO("Not yet implemented")
     }
+
+//    override suspend fun findLabelsByShopName(shopName: String): Result<List<Label>> = withContext(ioDispatcher) {
+//        localDataSource.findLabelsByShopName(shopName).let{ result ->
+//            if(result is Result.Success){
+//                return@withContext Result.Success(result.data)
+//            } else Result.Error(Exception("findLabelsByShopName Query Error"))
+//        }
+//    }
+//
+//    override suspend fun findLabelsByShopId(shopId: String): Result<List<Label>> = withContext(ioDispatcher) {
+//        localDataSource.findLabelsByShopId(shopId).let{ result ->
+//            if(result is Result.Success){
+//                return@withContext Result.Success(result.data)
+//            } else Result.Error(Exception("findLabelsByShopId Query Error"))
+//        }
+//    }
+
+
 
     private suspend fun refreshLocalDataSource(labelList: List<Label>) {
         for (label in labelList) {

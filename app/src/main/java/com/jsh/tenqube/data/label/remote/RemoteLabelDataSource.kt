@@ -1,6 +1,7 @@
 package com.jsh.tenqube.data.label.remote
 
 import com.jsh.tenqube.data.api.TenqubeService
+import com.jsh.tenqube.data.db.LocalShopAndLabels
 import com.jsh.tenqube.data.label.LabelDataSource
 import com.jsh.tenqube.data.mapper.toDomainLabelList
 import com.jsh.tenqube.data.mapper.toDomainShopList
@@ -39,4 +40,13 @@ class RemoteLabelDataSource @Inject constructor(
     override suspend fun isLabelDBEmpty(): Boolean {
         throw UnsupportedOperationException("unsupported operation")
     }
+
+    //    override suspend fun findLabelsByShopId(shopId: String): Result<List<Label>> {
+//        throw UnsupportedOperationException("unsupported operation")
+//    }
+//
+//    override suspend fun findLabelsByShopName(shopName: String): Result<List<Label>> {
+//        throw UnsupportedOperationException("unsupported operation")
+//    }
+
 }

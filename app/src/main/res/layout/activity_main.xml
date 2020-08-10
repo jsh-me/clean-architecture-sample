@@ -20,10 +20,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/item_label_list"
+        tools:listitem="@layout/item_shop_list"
         bindShopList="@{viewmodel.shopList}"
-        bindLabelList="@{viewmodel.labelList}"
-        />
+        bindLabelList="@{viewmodel.labelList}" />
+
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

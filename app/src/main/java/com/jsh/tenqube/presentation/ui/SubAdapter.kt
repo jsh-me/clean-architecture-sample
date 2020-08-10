@@ -6,10 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.jsh.tenqube.R
+import com.jsh.tenqube.domain.entity.Label
 import kotlinx.android.synthetic.main.item_label_list.view.*
 
 class SubAdapter(
-    private val label: List<String>
+    private val label: List<Label>
 ) :
     RecyclerView.Adapter<Holder>() {
 
@@ -24,7 +25,7 @@ class SubAdapter(
     override fun getItemCount(): Int = label.size
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.bind(label[position])
+        holder.bind(label[position].name)
     }
 }
 
