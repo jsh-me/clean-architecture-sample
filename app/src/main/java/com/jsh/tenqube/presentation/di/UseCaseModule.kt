@@ -38,4 +38,10 @@ class UseCaseModule {
         return GetShopWithLabelsUseCase(repo)
     }
 
+    @Provides
+    @ActivityRetainedScoped
+    fun deleteAllLabelUseCase(repo: LabelRepository): DeleteAllLabelUseCase{
+        return DeleteAllLabelUseCase(repo)
+    }
+
 }

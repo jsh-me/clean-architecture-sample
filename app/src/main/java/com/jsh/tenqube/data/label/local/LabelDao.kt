@@ -1,9 +1,6 @@
 package com.jsh.tenqube.data.label.local
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.*
 
 @Dao
 interface LabelDao{
@@ -14,7 +11,7 @@ interface LabelDao{
     @Query("DELETE FROM label")
     suspend fun deleteAllLabels()
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLabel(label: LocalLabelModel)
 
     @Query("SELECT count(*) FROM label")

@@ -41,6 +41,10 @@ class RemoteLabelDataSource @Inject constructor(
         throw UnsupportedOperationException("unsupported operation")
     }
 
+    override suspend fun deleteAllLabel() {
+        throw UnsupportedOperationException("unsupported operation")
+    }
+
     //    override suspend fun findLabelsByShopId(shopId: String): Result<List<Label>> {
 //        throw UnsupportedOperationException("unsupported operation")
 //    }

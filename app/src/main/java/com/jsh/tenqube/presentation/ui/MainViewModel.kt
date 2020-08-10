@@ -4,7 +4,6 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jsh.tenqube.data.mapper.toLocalDomainLabel
 import com.jsh.tenqube.data.mapper.toLocalDomainLabelList
 import com.jsh.tenqube.data.mapper.toLocalDomainShop
 import com.jsh.tenqube.domain.Result
@@ -17,6 +16,7 @@ class MainViewModel  @ViewModelInject constructor(
     private val getShopsUseCase: GetShopsUseCase,
     private val getLabelsUseCase: GetLabelsUseCase,
     private val deleteAllShopUseCase: DeleteAllShopUseCase,
+    private val deleteAllLabelUseCase: DeleteAllLabelUseCase,
     private val getShopWithLabelsUseCase: GetShopWithLabelsUseCase
 ): ViewModel() {
 
@@ -25,22 +25,27 @@ class MainViewModel  @ViewModelInject constructor(
     var labelList = MutableLiveData<List<List<Label>>>()
 
     init {
-        //      deleteAll()
+        //deleteAll()
 //        loadAllLabels()
 //        loadAllShops()
 
         //모든 데이터를 불러온다.
 
+       // deleteAll()
         initData()
-        loadData()
+        //loadData()
     }
 
     private fun deleteAll() = viewModelScope.launch {
         deleteAllShopUseCase()
+        deleteAllLabelUseCase()
     }
 
     private fun initData() = viewModelScope.launch {
-        getLabelsUseCase()
+        val deferred = async {
+            getLabelsUseCase()
+        }
+        deferred.await()
         getShopsUseCase()
     }
 

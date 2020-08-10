@@ -14,8 +14,11 @@ interface LabelDataSource {
 
     suspend fun isLabelDBEmpty(): Boolean
 
+    suspend fun deleteAllLabel()
+
 
 //    suspend fun findLabelsByShopId(shopId: String): Result<List<Label>>
 //
 //    suspend fun findLabelsByShopName(shopName: String): Result<List<Label>>
+
 }

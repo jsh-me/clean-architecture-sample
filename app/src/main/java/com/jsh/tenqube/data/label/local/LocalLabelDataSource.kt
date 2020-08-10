@@ -37,7 +37,11 @@ class LocalLabelDataSource @Inject constructor(
         return@withContext database.labelDao().isLabelDBEmpty() == 0
     }
 
-//    override suspend fun findLabelsByShopId(shopId: String): Result<List<Label>> = withContext(ioDispatcher) {
+    override suspend fun deleteAllLabel() = withContext(ioDispatcher) {
+        return@withContext  database.labelDao().deleteAllLabels()
+    }
+
+    //    override suspend fun findLabelsByShopId(shopId: String): Result<List<Label>> = withContext(ioDispatcher) {
 //        return@withContext try {
 //        Success(database.labelDao().findLabelsByShopId(shopId).toLocalDomainLabelList())
 //        } catch (e: Exception) {

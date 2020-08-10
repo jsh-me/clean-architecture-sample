@@ -26,5 +26,5 @@ import com.jsh.tenqube.data.shop.local.LocalShopModel
 data class LocalShopAndLabels (
     @Embedded val shop: LocalShopModel,
     @Relation(parentColumn = "id", entityColumn = "shop_id")
-    var labels: List<LocalLabelModel> = ArrayList()
+    val labels: List<LocalLabelModel>
 )

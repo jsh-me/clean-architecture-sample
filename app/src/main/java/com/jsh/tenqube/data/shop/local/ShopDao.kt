@@ -8,11 +8,7 @@ interface ShopDao{
     @Query("SELECT * FROM shop")
     suspend fun getShops(): List<LocalShopModel>
 
-//    @Transaction
-//    @Query("SELECT * FROM shopList")
-//    suspend fun getShopAndAllLabels(): List<ShopToShopAndLabelList>
-
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertShop(shop: LocalShopModel)
 
     @Query("SELECT * FROM shop WHERE id= :shopId")

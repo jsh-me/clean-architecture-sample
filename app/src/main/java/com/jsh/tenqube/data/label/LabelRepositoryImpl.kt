@@ -47,7 +47,11 @@ class LabelRepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-//    override suspend fun findLabelsByShopName(shopName: String): Result<List<Label>> = withContext(ioDispatcher) {
+    override suspend fun deleteAllLabel() = withContext(ioDispatcher) {
+        return@withContext localDataSource.deleteAllLabel()
+    }
+
+    //    override suspend fun findLabelsByShopName(shopName: String): Result<List<Label>> = withContext(ioDispatcher) {
 //        localDataSource.findLabelsByShopName(shopName).let{ result ->
 //            if(result is Result.Success){
 //                return@withContext Result.Success(result.data)
@@ -64,7 +68,6 @@ class LabelRepositoryImpl @Inject constructor(
 //    }
 
 
-
     private suspend fun refreshLocalDataSource(labelList: List<Label>) {
         for (label in labelList) {
             localDataSource.saveLabel(label)
@@ -73,8 +76,8 @@ class LabelRepositoryImpl @Inject constructor(
 
 
     private suspend fun cacheLabel(list: List<Label>) = withContext(ioDispatcher) {
-        list.map{
-            localDataSource.insertLabel(it)
-        }
+//        list.map{
+//            localDataSource.insertLabel(it)
+//        }
     }
 }

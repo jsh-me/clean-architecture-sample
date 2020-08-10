@@ -11,6 +11,9 @@ interface LabelRepository {
 
     suspend fun saveLabel(label: Label)
 
+    suspend fun deleteAllLabel()
+
+
 //    suspend fun findLabelsByShopName(shopName: String): Result<List<Label>>
 //
 //    suspend fun findLabelsByShopId(shopId: String): Result<List<Label>>

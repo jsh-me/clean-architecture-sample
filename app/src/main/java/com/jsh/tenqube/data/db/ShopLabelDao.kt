@@ -4,6 +4,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
+import com.jsh.tenqube.data.dto.LabelModel
+import com.jsh.tenqube.data.dto.ShopModel
 
 @Dao
 interface ShopLabelDao{
@@ -28,8 +30,18 @@ interface ShopLabelDao{
     @Query("SELECT * FROM shopList")
     suspend fun getShopWithAllLabelList(): List<ShopWithAllLabelList>*/
 
+//    @Transaction
+//    suspend fun insertShopAndLabels(shop: ShopModel, labels: List<LabelModel>) {
+//        val memoId = insertShop(shop)
+//        for (i in labels.indices) {
+//            labels[i].id = memoId
+//            labels[i]. = i + 1
+//        }
+//        insertLabels(labels)
+//    }
+//
 
     @Query("SELECT * FROM shop")
-    fun getShop(): List<LocalShopAndLabels>
+    suspend fun getShop(): List<LocalShopAndLabels>
 }
 
