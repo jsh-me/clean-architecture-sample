@@ -1,7 +1,8 @@
 package com.jsh.tenqube.data.shop
 
-import com.jsh.tenqube.domain.entity.Shop
+import com.jsh.tenqube.data.shopAndLabel.ShopWithAllLabel
 import com.jsh.tenqube.domain.Result
+import com.jsh.tenqube.domain.entity.DomainShop.*
 
 interface ShopDataSource {
 
@@ -9,21 +10,16 @@ interface ShopDataSource {
 
     suspend fun isShopDBEmpty(): Boolean
 
+    suspend fun getShopDetails(): List<ShopWithAllLabel>
+
     suspend fun getShop(id: String): Result<Shop>
 
-    suspend fun insertShop(shop: Shop)
+    suspend fun insertShop(shop: Shop): List<Unit>
 
-    suspend fun saveShop(shop: Shop)
+    suspend fun updateShop(shop: Shop)
 
     suspend fun deleteShop(id: String)
 
     suspend fun deleteAllShop()
-
-   // suspend fun getShopWithRestList(): List<ShopLabelWithLabelList>
-
-  //  suspend fun getShopWithAllLabelList(): List<ShopWithAllLabelList>
-
-    //suspend fun getShop(): List<LocalShopAndLabels>
-
 
 }

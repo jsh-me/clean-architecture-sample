@@ -1,4 +1,4 @@
-package com.jsh.tenqube.presentation.ui
+package com.jsh.tenqube.presentation.ui.first
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.jsh.tenqube.R
-import com.jsh.tenqube.domain.entity.Label
+import com.jsh.tenqube.domain.entity.DomainLabel.*
 import kotlinx.android.synthetic.main.item_label_list.view.*
 
 class SubAdapter(

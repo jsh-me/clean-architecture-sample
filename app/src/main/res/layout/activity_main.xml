@@ -5,13 +5,13 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.jsh.tenqube.presentation.ui.MainViewModel" />
+            type="com.jsh.tenqube.presentation.ui.first.FirstViewModel" />
     </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.ui.MainActivity">
+    tools:context=".presentation.ui.first.FirstActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mainRecycler"
@@ -21,10 +21,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/item_shop_list"
-        bindShopList="@{viewmodel.shopList}"
-        bindLabelList="@{viewmodel.labelList}" />
+        bindShopAndLabelList = "@{viewmodel.shopAndLabelList}" />
 
-
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:onClick="@{() -> viewmodel.addButtonClicked()}"
+        android:src ="@drawable/ic_baseline_add_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
 

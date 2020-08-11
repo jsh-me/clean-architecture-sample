@@ -1,7 +1,8 @@
 package com.jsh.tenqube.domain.usecase
 
-import com.jsh.tenqube.domain.entity.Shop
 import com.jsh.tenqube.domain.Result
+import com.jsh.tenqube.domain.entity.DomainShop
+import com.jsh.tenqube.domain.entity.DomainShop.*
 import com.jsh.tenqube.domain.repository.LabelRepository
 import com.jsh.tenqube.domain.repository.ShopRepository
 

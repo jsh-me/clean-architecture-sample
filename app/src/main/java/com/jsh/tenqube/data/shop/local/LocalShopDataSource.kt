@@ -1,11 +1,14 @@
 package com.jsh.tenqube.data.shop.local
 
-import com.jsh.tenqube.data.db.LocalShopLabelModel
+import com.jsh.tenqube.data.shopAndLabel.ShopWithAllLabel
 import com.jsh.tenqube.data.mapper.*
 import com.jsh.tenqube.data.shop.ShopDataSource
 import com.jsh.tenqube.data.db.TenqubeDatabase
+import com.jsh.tenqube.data.shopAndLabel.DataShopLocal
+import com.jsh.tenqube.data.shopAndLabel.DataShopLocal.*
 import com.jsh.tenqube.domain.Result
-import com.jsh.tenqube.domain.entity.Shop
+import com.jsh.tenqube.domain.entity.DomainShop
+import com.jsh.tenqube.domain.entity.DomainShop.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -34,9 +37,12 @@ class LocalShopDataSource @Inject constructor(
         }
     }
 
+    override suspend fun getShopDetails(): List<ShopWithAllLabel> = withContext(ioDispatcher) {
+        database.shopLabelDao().getShopWithAllLabel()
+    }
 
-    override suspend fun saveShop(shop: Shop) = withContext(ioDispatcher){
-        database.shopDao().saveShop(shop.toLocalDataShopModel())
+    override suspend fun updateShop(shop: Shop) = withContext(ioDispatcher){
+        database.shopDao().updateShop(shop.toLocalDataShopModel())
     }
 
 
@@ -49,24 +55,17 @@ class LocalShopDataSource @Inject constructor(
         Timber.e("All Delete Completed")
     }
 
-//    override suspend fun getShop(): List<LocalShopAndLabels>  = withContext(ioDispatcher) {
-//        database.shopLabelDao().getShop()
-//    }
-
-    //    override suspend fun getShopWithRestList(): List<ShopLabelWithLabelList> = withContext(ioDispatcher) {
-//        database.shopLabelDao().getShopWithLabelList()
-//    }
-
-//    override suspend fun getShopWithAllLabelList(): List<ShopWithAllLabelList> = withContext(ioDispatcher) {
-//        database.shopLabelDao().getShopWithAllLabelList()
-//    }
-
-    //shop , shoplabel
+    //shop
     override suspend fun insertShop(shop: Shop) = withContext(ioDispatcher) {
-        shop.labelIds.map { labelId ->
-            database.shopLabelDao().insertShopLabel(LocalShopLabelModel(shopId = shop.id, labelId = labelId))
-        }
         database.shopDao().insertShop(shop.toLocalDataShopModel())
+        shop.labelIds.map{
+            database.shopLabelDao().insertShopWithLabel(
+                LocalShopLabelModel(
+                    shop.id,
+                    it
+                )
+            )
+        }
     }
 
     override suspend fun isShopDBEmpty(): Boolean = withContext(ioDispatcher) {

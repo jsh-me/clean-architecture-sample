@@ -1,8 +1,8 @@
 package com.jsh.tenqube.data.label
 
-import com.jsh.tenqube.domain.entity.Label
 import com.jsh.tenqube.domain.repository.LabelRepository
 import com.jsh.tenqube.domain.Result
+import com.jsh.tenqube.domain.entity.DomainLabel.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -47,26 +47,10 @@ class LabelRepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
+
     override suspend fun deleteAllLabel() = withContext(ioDispatcher) {
         return@withContext localDataSource.deleteAllLabel()
     }
-
-    //    override suspend fun findLabelsByShopName(shopName: String): Result<List<Label>> = withContext(ioDispatcher) {
-//        localDataSource.findLabelsByShopName(shopName).let{ result ->
-//            if(result is Result.Success){
-//                return@withContext Result.Success(result.data)
-//            } else Result.Error(Exception("findLabelsByShopName Query Error"))
-//        }
-//    }
-//
-//    override suspend fun findLabelsByShopId(shopId: String): Result<List<Label>> = withContext(ioDispatcher) {
-//        localDataSource.findLabelsByShopId(shopId).let{ result ->
-//            if(result is Result.Success){
-//                return@withContext Result.Success(result.data)
-//            } else Result.Error(Exception("findLabelsByShopId Query Error"))
-//        }
-//    }
-
 
     private suspend fun refreshLocalDataSource(labelList: List<Label>) {
         for (label in labelList) {
@@ -76,8 +60,8 @@ class LabelRepositoryImpl @Inject constructor(
 
 
     private suspend fun cacheLabel(list: List<Label>) = withContext(ioDispatcher) {
-//        list.map{
-//            localDataSource.insertLabel(it)
-//        }
+        list.map{
+            localDataSource.insertLabel(it)
+        }
     }
 }

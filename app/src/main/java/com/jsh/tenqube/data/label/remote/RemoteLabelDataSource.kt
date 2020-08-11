@@ -1,18 +1,14 @@
 package com.jsh.tenqube.data.label.remote
 
 import com.jsh.tenqube.data.api.TenqubeService
-import com.jsh.tenqube.data.db.LocalShopAndLabels
 import com.jsh.tenqube.data.label.LabelDataSource
 import com.jsh.tenqube.data.mapper.toDomainLabelList
-import com.jsh.tenqube.data.mapper.toDomainShopList
 import com.jsh.tenqube.domain.Result
-import com.jsh.tenqube.domain.entity.Label
-import com.jsh.tenqube.domain.entity.Shop
+import com.jsh.tenqube.domain.entity.DomainLabel
+import com.jsh.tenqube.domain.entity.DomainLabel.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentMap
 import javax.inject.Inject
 
 
@@ -44,13 +40,4 @@ class RemoteLabelDataSource @Inject constructor(
     override suspend fun deleteAllLabel() {
         throw UnsupportedOperationException("unsupported operation")
     }
-
-    //    override suspend fun findLabelsByShopId(shopId: String): Result<List<Label>> {
-//        throw UnsupportedOperationException("unsupported operation")
-//    }
-//
-//    override suspend fun findLabelsByShopName(shopName: String): Result<List<Label>> {
-//        throw UnsupportedOperationException("unsupported operation")
-//    }
-
 }

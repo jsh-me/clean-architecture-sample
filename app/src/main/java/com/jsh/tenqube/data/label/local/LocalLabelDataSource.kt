@@ -6,7 +6,7 @@ import com.jsh.tenqube.domain.Result.*
 import com.jsh.tenqube.data.db.TenqubeDatabase
 import com.jsh.tenqube.data.mapper.toDataLocalLabelModel
 import com.jsh.tenqube.data.mapper.toLocalDomainLabelList
-import com.jsh.tenqube.domain.entity.Label
+import com.jsh.tenqube.domain.entity.DomainLabel.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -40,20 +40,4 @@ class LocalLabelDataSource @Inject constructor(
     override suspend fun deleteAllLabel() = withContext(ioDispatcher) {
         return@withContext  database.labelDao().deleteAllLabels()
     }
-
-    //    override suspend fun findLabelsByShopId(shopId: String): Result<List<Label>> = withContext(ioDispatcher) {
-//        return@withContext try {
-//        Success(database.labelDao().findLabelsByShopId(shopId).toLocalDomainLabelList())
-//        } catch (e: Exception) {
-//            Error(e)
-//        }
-//    }
-//
-//    override suspend fun findLabelsByShopName(shopName: String): Result<List<Label>> = withContext(ioDispatcher) {
-//        return@withContext try{
-//            Success(database.labelDao().findLabelsByShopName(shopName).toLocalDomainLabelList())
-//        } catch (e: Exception) {
-//            Error(e)
-//        }
-//    }
 }

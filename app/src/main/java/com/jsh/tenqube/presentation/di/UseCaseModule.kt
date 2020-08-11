@@ -44,4 +44,16 @@ class UseCaseModule {
         return DeleteAllLabelUseCase(repo)
     }
 
+    @Provides
+    @ActivityRetainedScoped
+    fun updateShopInfoUseCase(repo: ShopRepository): UpdateShopInfoUseCase{
+        return UpdateShopInfoUseCase(repo)
+    }
+
+    @Provides
+    @ActivityRetainedScoped
+    fun deleteShopInfoUseCase(repo: ShopRepository): DeleteShopInfoUseCase{
+        return DeleteShopInfoUseCase(repo)
+    }
+
 }

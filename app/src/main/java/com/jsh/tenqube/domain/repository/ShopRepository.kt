@@ -1,25 +1,23 @@
 package com.jsh.tenqube.domain.repository
 
 import com.jsh.tenqube.domain.Result
-import com.jsh.tenqube.domain.entity.Shop
+import com.jsh.tenqube.domain.entity.DomainShop
+import com.jsh.tenqube.domain.entity.DomainShop.*
+import com.jsh.tenqube.domain.entity.DomainShopLabel
+import com.jsh.tenqube.domain.entity.DomainShopLabel.*
 
 interface ShopRepository {
 
     suspend fun getShops(): Result<List<Shop>>
 
-    suspend fun getShop(id: String): Result<Shop>
+    suspend fun getShopDetails(): List<ShopLabel>
 
-    suspend fun saveShop(shop: Shop)
+    suspend fun fetchShopFromRemoteOrLocal(id: String): Result<Shop>
+
+    suspend fun updateShop(shop: Shop)
 
     suspend fun deleteShop(id: String)
 
     suspend fun deleteAllShop()
-
-   // suspend fun getShopWithRestList(): List<ShopLabelWithLabelList>
-
-  //  suspend fun getShopWithAllLabelList(): List<ShopWithAllLabelList>
-
- //   suspend fun getShop(): List<LocalShopAndLabels>
-
 
 }

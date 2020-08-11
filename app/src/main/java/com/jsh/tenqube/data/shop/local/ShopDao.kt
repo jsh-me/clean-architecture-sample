@@ -1,6 +1,7 @@
 package com.jsh.tenqube.data.shop.local
 
 import androidx.room.*
+import com.jsh.tenqube.data.shop.local.DataShop.*
 
 @Dao
 interface ShopDao{
@@ -11,10 +12,10 @@ interface ShopDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertShop(shop: LocalShopModel)
 
-    @Query("SELECT * FROM shop WHERE id= :shopId")
+    @Query("SELECT * FROM shop WHERE shopId= :shopId")
     suspend fun getShopById(shopId: String): LocalShopModel
 
-    @Query("DELETE FROM shop WHERE id= :shopId")
+    @Query("DELETE FROM shop WHERE shopId= :shopId")
     suspend fun deleteShopById(shopId: String)
 
     @Query("SELECT count(*) FROM shop")
@@ -23,7 +24,9 @@ interface ShopDao{
     @Query("DELETE FROM shop")
     suspend fun deleteAllShops()
 
-    @Update
-    suspend fun saveShop(shop: LocalShopModel)
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun updateShop(shop: LocalShopModel)
+
+
 
 }

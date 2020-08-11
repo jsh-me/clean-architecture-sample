@@ -1,31 +1,27 @@
-package com.jsh.tenqube.presentation.ui
+package com.jsh.tenqube.presentation.ui.first
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.jsh.tenqube.R
 import com.jsh.tenqube.databinding.ItemShopListBinding
-import com.jsh.tenqube.domain.entity.Label
-import com.jsh.tenqube.domain.entity.Shop
+import com.jsh.tenqube.domain.entity.DomainLabel.*
+import com.jsh.tenqube.domain.entity.DomainShop.*
+import com.jsh.tenqube.presentation.ui.second.SecondActivity
 import com.jsh.tenqube.presentation.util.toLoadUrl
-import com.jsh.tenqube.presentation.util.toValue
-import kotlinx.android.synthetic.main.item_shop_list.view.*
 import timber.log.Timber
 
 class MainAdapter:
 RecyclerView.Adapter<MainAdapter.Holder>() {
 
-    var shop: List<Shop> = listOf()
-    var labelMap: List<List<Label>> = listOf()
+    private var shop: List<Shop> = listOf()
+    private var labelMap: List<List<Label>> = listOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val inflater = LayoutInflater.from(parent.context)
@@ -46,22 +42,32 @@ RecyclerView.Adapter<MainAdapter.Holder>() {
         holder.shopImage.toLoadUrl(shop[position].imgUrl)
         holder.shopImage.clipToOutline = true
         holder.subRecycler.run{
-            adapter = SubAdapter(labelMap[position])
+            adapter =
+                SubAdapter(labelMap[position])
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         }
         holder.constraint.setOnClickListener {
-            val intent = Intent(it.context, SubActivity::class.java).apply {
+            val intent = Intent(it.context, SecondActivity::class.java).apply {
                 putExtra("ShopId", shop[position].id)
+                putExtra("ShopLabels", labelMap[position].map{ it.name } as ArrayList<String>)
                 putExtra("ShopName", shop[position].name)
                 putExtra("ShopUrl", shop[position].imgUrl)
             }
-            it.context.startActivity(intent)
+            (it.context as Activity).startActivityForResult(intent, 1000)
             Toast.makeText(it.context, shop[position].id, Toast.LENGTH_LONG).show()
         }
 
-
         Timber.e("label: ${labelMap.size} and shop: ${shop.size}")
     }
+
+    fun setShopList(shopList: List<Shop>) {
+        shop = shopList
+    }
+
+    fun setLabelMap(labels: List<List<Label>>){
+        labelMap = labels
+    }
+
 
     inner class Holder(
         binding: ItemShopListBinding,
@@ -70,4 +76,5 @@ RecyclerView.Adapter<MainAdapter.Holder>() {
         val subRecycler: RecyclerView,
         val constraint: ConstraintLayout
     ) : RecyclerView.ViewHolder(binding.root)
+
 }

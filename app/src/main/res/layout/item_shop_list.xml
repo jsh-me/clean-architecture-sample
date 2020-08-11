@@ -3,7 +3,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.jsh.tenqube.presentation.ui.MainViewModel" />
+            type="com.jsh.tenqube.presentation.ui.first.FirstViewModel" />
     </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout
