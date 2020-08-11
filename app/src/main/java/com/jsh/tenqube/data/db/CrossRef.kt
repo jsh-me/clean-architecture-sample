@@ -23,8 +23,20 @@ import com.jsh.tenqube.data.shop.local.LocalShopModel
 //)
 
 
-data class LocalShopAndLabels (
+//data class LocalShopAndLabels (
+//    @Embedded val shop: LocalShopModel,
+//    @Relation(parentColumn = "id", entityColumn = "shop_id")
+//    val labels: List<LocalLabelModel>
+//)
+
+data class ShopOtherDetails(
     @Embedded val shop: LocalShopModel,
-    @Relation(parentColumn = "id", entityColumn = "shop_id")
+    @Relation(parentColumn = "id", entityColumn = "shopId", entity = LocalShopLabelModel::class)
+    val shopLabel: List<LabelDetails>
+)
+
+data class LabelDetails(
+    @Embedded val shopLabel: LocalShopLabelModel,
+    @Relation(parentColumn = "labelId", entityColumn = "id")
     val labels: List<LocalLabelModel>
 )

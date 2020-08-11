@@ -1,6 +1,5 @@
 package com.jsh.tenqube.data.shop
 
-import com.jsh.tenqube.data.db.LocalShopAndLabels
 import com.jsh.tenqube.domain.entity.Shop
 import com.jsh.tenqube.domain.Result
 
@@ -24,7 +23,7 @@ interface ShopDataSource {
 
   //  suspend fun getShopWithAllLabelList(): List<ShopWithAllLabelList>
 
-    suspend fun getShop(): List<LocalShopAndLabels>
+    //suspend fun getShop(): List<LocalShopAndLabels>
 
 
 }

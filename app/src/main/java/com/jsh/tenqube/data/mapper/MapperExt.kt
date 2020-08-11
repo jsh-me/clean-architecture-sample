@@ -1,6 +1,5 @@
 package com.jsh.tenqube.data.mapper
 
-import com.jsh.tenqube.data.db.LocalShopAndLabels
 import com.jsh.tenqube.data.dto.LabelModel
 import com.jsh.tenqube.data.dto.ShopModel
 import com.jsh.tenqube.data.label.local.LocalLabelModel
@@ -22,7 +21,7 @@ fun List<ShopModel>.toDomainShopList(): List<Shop>{
 
 fun List<LocalLabelModel>.toLocalDomainLabelList(): List<Label>{
     return this.map{
-        Label(it.shopId, it.name)
+        Label(it.id, it.name)
     }
 }
 
@@ -60,7 +59,7 @@ fun ShopModel.toDomainShop(): Shop{
 
 
 fun Label.toDataLocalLabelModel(): LocalLabelModel{
-    return LocalLabelModel(this.id, this.id, this.name)
+    return LocalLabelModel(this.id, this.name)
 }
 
 fun LocalShopModel.toLocalDomainShop(): Shop{

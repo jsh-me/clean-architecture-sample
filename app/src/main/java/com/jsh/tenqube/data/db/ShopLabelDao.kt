@@ -30,18 +30,14 @@ interface ShopLabelDao{
     @Query("SELECT * FROM shopList")
     suspend fun getShopWithAllLabelList(): List<ShopWithAllLabelList>*/
 
-//    @Transaction
-//    suspend fun insertShopAndLabels(shop: ShopModel, labels: List<LabelModel>) {
-//        val memoId = insertShop(shop)
-//        for (i in labels.indices) {
-//            labels[i].id = memoId
-//            labels[i]. = i + 1
-//        }
-//        insertLabels(labels)
-//    }
-//
+//    @Query("SELECT * FROM shop")
+//    suspend fun getShop(): List<LocalShopAndLabels>
 
+    @Transaction
     @Query("SELECT * FROM shop")
-    suspend fun getShop(): List<LocalShopAndLabels>
+    suspend fun getShopDetails(): List<ShopOtherDetails>
+
+    @Insert
+    suspend fun insertShopLabel(shopLabel: LocalShopLabelModel)
 }
 

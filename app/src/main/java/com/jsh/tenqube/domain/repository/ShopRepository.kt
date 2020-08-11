@@ -1,6 +1,5 @@
 package com.jsh.tenqube.domain.repository
 
-import com.jsh.tenqube.data.db.LocalShopAndLabels
 import com.jsh.tenqube.domain.Result
 import com.jsh.tenqube.domain.entity.Shop
 
@@ -20,7 +19,7 @@ interface ShopRepository {
 
   //  suspend fun getShopWithAllLabelList(): List<ShopWithAllLabelList>
 
-    suspend fun getShop(): List<LocalShopAndLabels>
+ //   suspend fun getShop(): List<LocalShopAndLabels>
 
 
 }

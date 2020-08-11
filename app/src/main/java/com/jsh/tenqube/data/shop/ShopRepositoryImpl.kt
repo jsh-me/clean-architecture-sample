@@ -1,6 +1,5 @@
 package com.jsh.tenqube.data.shop
 
-import com.jsh.tenqube.data.db.LocalShopAndLabels
 import com.jsh.tenqube.domain.Result
 import com.jsh.tenqube.domain.entity.Shop
 import com.jsh.tenqube.domain.repository.ShopRepository
@@ -65,9 +64,9 @@ class ShopRepositoryImpl @Inject constructor(
 //        localDataSource.getShopWithAllLabelList()
 //    }
 
-    override suspend fun getShop(): List<LocalShopAndLabels> = withContext(ioDispatcher) {
-        localDataSource.getShop()
-    }
+//    override suspend fun getShop(): List<LocalShopAndLabels> = withContext(ioDispatcher) {
+//        localDataSource.getShop()
+//    }
 
     private suspend fun fetchListFromRemoteOrLocal(){
         val remoteShopData = remoteDataSource.getShops()
