@@ -27,7 +27,7 @@ class ShopLabelRepositoryImpl @Inject constructor(
         localDataSource.deleteAllShopLabels()
     }
 
-    override suspend fun updateShopLabels(shopLabel: SingleShopLabel) {
+    override suspend fun updateShopLabels(shopLabel: SingleShopLabel) = withContext(ioDispatcher){
         localDataSource.updateShopLabels(shopLabel)
     }
 }

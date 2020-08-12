@@ -35,7 +35,7 @@ class LocalShopLabelDataSource @Inject constructor(
         database.shopLabelDao().deleteAllShopLabel()
     }
 
-    override suspend fun updateShopLabels(shopLabel: DomainShopLabel.SingleShopLabel) {
-            database.shopLabelDao().updateShopLabels(shopLabel.toDataShopLabel())
+    override suspend fun updateShopLabels(shopLabel: DomainShopLabel.SingleShopLabel) = withContext(ioDispatcher){
+            database.shopLabelDao().updateShopLabels(LocalShopLabelModel(shopId = shopLabel.shopId, labelId = shopLabel.labelId))
     }
 }

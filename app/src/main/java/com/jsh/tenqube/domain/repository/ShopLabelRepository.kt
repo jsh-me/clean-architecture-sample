@@ -1,8 +1,6 @@
 package com.jsh.tenqube.domain.repository
 
-import com.jsh.tenqube.domain.entity.DomainShop
 import com.jsh.tenqube.domain.entity.DomainShop.*
-import com.jsh.tenqube.domain.entity.DomainShopLabel
 import com.jsh.tenqube.domain.entity.DomainShopLabel.*
 
 interface ShopLabelRepository{

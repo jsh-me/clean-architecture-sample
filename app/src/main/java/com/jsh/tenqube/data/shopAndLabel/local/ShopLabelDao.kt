@@ -16,7 +16,7 @@ interface ShopLabelDao{
     @Query("DELETE FROM shopLabel")
     fun deleteAllShopLabel()
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     fun updateShopLabels(shopLabel: LocalShopLabelModel)
 
 }
