@@ -7,9 +7,7 @@ import com.jsh.tenqube.data.shop.ShopDataSource
 import com.jsh.tenqube.domain.Result
 import com.jsh.tenqube.domain.entity.DomainShop
 import com.jsh.tenqube.domain.entity.DomainShop.Shop
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 import javax.inject.Inject
@@ -46,21 +44,28 @@ class RemoteShopDataSource @Inject constructor(
         return@withContext tenqubeServiceData?.size == 0
     }
 
-    override suspend fun insertShop(shop: Shop): List<Unit> = withContext(ioDispatcher) {
-        tenqubeServiceData?.put(shop.id, shop)
-        return@withContext emptyList<Unit>()
+    override suspend fun insertShop(shop: Shop) {
+        coroutineScope {
+            launch { tenqubeServiceData?.put(shop.id, shop) }
+        }
     }
 
     override suspend fun updateShop(shop: Shop) {
-        tenqubeServiceData?.set(shop.id, shop)
+        coroutineScope {
+            launch { tenqubeServiceData?.set(shop.id, shop) }
+        }
     }
 
     override suspend fun deleteShop(id: String) {
-        tenqubeServiceData?.set(id, Shop("","","", emptyList()))
+        coroutineScope {
+            launch { tenqubeServiceData?.set(id, Shop("", "", "", emptyList())) }
+        }
     }
 
     override suspend fun deleteAllShop() {
-       tenqubeServiceData?.clear()
+        coroutineScope {
+            launch { tenqubeServiceData?.clear() }
+        }
     }
 
 

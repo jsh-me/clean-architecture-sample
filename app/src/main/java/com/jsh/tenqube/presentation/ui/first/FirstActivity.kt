@@ -3,10 +3,13 @@ package com.jsh.tenqube.presentation.ui.first
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.jsh.tenqube.R
 import com.jsh.tenqube.databinding.ActivityMainBinding
 import com.jsh.tenqube.presentation.ui.second.SecondActivity
 import com.jsh.tenqube.presentation.util.viewBinding
@@ -37,7 +40,6 @@ class FirstActivity : AppCompatActivity() {
 
     private fun observeData(){
         viewModel.shopAndLabelList.observe(this, Observer {
-           // setupListAdapter()
             binding.mainRecycler.adapter?.notifyDataSetChanged()
             Timber.e("activity invoke")
         })
@@ -70,4 +72,26 @@ class FirstActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.allLoad -> { return allLoad() }
+            R.id.allDelete -> { return allDelete() }
+            else -> {return super.onOptionsItemSelected(item)}
+        }
+    }
+
+    private fun allLoad(): Boolean{
+        viewModel.allLoad()
+        return true
+    }
+    private fun allDelete(): Boolean{
+        viewModel.allDelete()
+        binding.mainRecycler.adapter?.notifyDataSetChanged()
+        return true
+    }
 }

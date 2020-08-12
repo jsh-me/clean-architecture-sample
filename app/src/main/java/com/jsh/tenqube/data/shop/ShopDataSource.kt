@@ -12,7 +12,7 @@ interface ShopDataSource {
 
     suspend fun getShop(id: String): Result<Shop>
 
-    suspend fun insertShop(shop: Shop): List<Unit>
+    suspend fun insertShop(shop: Shop)
 
     suspend fun updateShop(shop: Shop)
 

@@ -52,7 +52,8 @@ class SecondActivity : AppCompatActivity() {
         })
 
         viewModel.addImageButtonClicked.observe(this, Observer {
-            binding.detailShopImage.toLoadUrl(resources.getString(R.string.testImage))
+            //binding.detailShopImage.toLoadUrl(resources.getString(R.string.testImage))
+            viewModel.setImageUrl(resources.getString(R.string.testImage))
         })
     }
 

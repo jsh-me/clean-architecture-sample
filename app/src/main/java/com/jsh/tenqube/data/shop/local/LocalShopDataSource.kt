@@ -6,9 +6,7 @@ import com.jsh.tenqube.data.db.TenqubeDatabase
 import com.jsh.tenqube.data.shopAndLabel.local.DataShopLocal.*
 import com.jsh.tenqube.domain.Result
 import com.jsh.tenqube.domain.entity.DomainShop.*
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import timber.log.Timber
 import java.lang.Exception
 import javax.inject.Inject
@@ -50,15 +48,14 @@ class LocalShopDataSource @Inject constructor(
     }
 
     //shop
-    override suspend fun insertShop(shop: Shop) = withContext(ioDispatcher) {
-        database.shopDao().insertShop(shop.toLocalDataShopModel())
-        shop.labelIds.map{
-            database.shopLabelDao().insertShopWithLabel(
-                LocalShopLabelModel(
-                    shop.id,
-                    it
-                )
-            )
+    override suspend fun insertShop(shop: Shop) {
+        coroutineScope {
+            database.shopDao().insertShop(shop.toLocalDataShopModel())
+            launch {
+                shop.labelIds.map {
+                    database.shopLabelDao().insertShopWithLabel(
+                        LocalShopLabelModel(shop.id, it)) }
+            }
         }
     }
 

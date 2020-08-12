@@ -78,6 +78,10 @@ class SecondViewModel @ViewModelInject constructor(
         return !shopName.value.isNullOrEmpty()
     }
 
+    fun setImageUrl(url: String){
+        shopUrl.value = url
+    }
+
     fun setShopInfo(info: ArrayList<String>){
         shopId.value = info[0]
         shopName.value = info[2]

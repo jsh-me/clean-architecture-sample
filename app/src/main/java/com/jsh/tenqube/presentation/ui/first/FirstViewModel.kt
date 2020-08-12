@@ -45,6 +45,16 @@ class FirstViewModel  @ViewModelInject constructor(
         }
     }
 
+    fun allLoad(){
+        initData()
+    }
+
+    fun allDelete() = viewModelScope.launch {
+        shopAndLabelList.value = emptyList()
+        deleteAllShopUseCase()
+        deleteAllLabelUseCase()
+    }
+
     fun openShopDetails(id: String, url: String, name: String, label: String){
         openShopListClicked.value = arrayListOf(id, url, name, label)
     }
