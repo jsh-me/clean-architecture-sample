@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.jsh.tenqube.domain.usecase.*
 import com.jsh.tenqube.presentation.SingleLiveEvent
 import com.jsh.tenqube.presentation.entity.PresenterShopLabel.PresenterShopLabelList
-import com.jsh.tenqube.presentation.mapper.toShopLabelList
+import com.jsh.tenqube.presentation.mapper.toPresenterShopLabelList
 import kotlinx.coroutines.*
 
 class FirstViewModel  @ViewModelInject constructor(
@@ -18,11 +18,13 @@ class FirstViewModel  @ViewModelInject constructor(
     private val getShopWithLabelsUseCase: GetShopWithLabelsUseCase
 ): ViewModel() {
 
-    val shopAndLabelList = MutableLiveData<List<PresenterShopLabelList>>()
+    val shopAndLabelList = MutableLiveData<List<PresenterShopLabelList>>().apply{ value = emptyList()}
     val addButtonClicked: SingleLiveEvent<Void> = SingleLiveEvent()
+    val openShopListClicked: SingleLiveEvent<ArrayList<String>> = SingleLiveEvent()
+
 
     init {
-       // deleteAll()
+        //deleteAll()
         initData()
     }
 
@@ -39,10 +41,13 @@ class FirstViewModel  @ViewModelInject constructor(
         getShopsUseCase()
 
         viewModelScope.launch {
-            shopAndLabelList.value = getShopWithLabelsUseCase().toShopLabelList()
+            shopAndLabelList.value = getShopWithLabelsUseCase().toPresenterShopLabelList()
         }
     }
 
+    fun openShopDetails(id: String, url: String, name: String, label: String){
+        openShopListClicked.value = arrayListOf(id, url, name, label)
+    }
 
     fun addButtonClicked(){
         addButtonClicked.call()

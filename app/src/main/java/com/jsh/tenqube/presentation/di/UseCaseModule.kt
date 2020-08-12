@@ -1,6 +1,7 @@
 package com.jsh.tenqube.presentation.di
 
 import com.jsh.tenqube.domain.repository.LabelRepository
+import com.jsh.tenqube.domain.repository.ShopLabelRepository
 import com.jsh.tenqube.domain.repository.ShopRepository
 import com.jsh.tenqube.domain.usecase.*
 import dagger.Module
@@ -28,32 +29,51 @@ class UseCaseModule {
 
     @Provides
     @ActivityRetainedScoped
-    fun deleteAllShopUseCase(repo: ShopRepository): DeleteAllShopUseCase{
-        return DeleteAllShopUseCase(repo)
+    fun deleteAllShopUseCase(shop: ShopRepository, shopLabel: ShopLabelRepository): DeleteAllShopUseCase {
+        return DeleteAllShopUseCase(shop, shopLabel)
     }
 
     @Provides
     @ActivityRetainedScoped
-    fun getShopWithLabelsUseCase(repo: ShopRepository): GetShopWithLabelsUseCase{
+    fun getShopWithLabelsUseCase(repo: ShopLabelRepository): GetShopWithLabelsUseCase {
         return GetShopWithLabelsUseCase(repo)
     }
 
     @Provides
     @ActivityRetainedScoped
-    fun deleteAllLabelUseCase(repo: LabelRepository): DeleteAllLabelUseCase{
+    fun deleteAllLabelUseCase(repo: LabelRepository): DeleteAllLabelUseCase {
         return DeleteAllLabelUseCase(repo)
     }
 
     @Provides
     @ActivityRetainedScoped
-    fun updateShopInfoUseCase(repo: ShopRepository): UpdateShopInfoUseCase{
+    fun updateShopInfoUseCase(repo: ShopRepository): UpdateShopInfoUseCase {
         return UpdateShopInfoUseCase(repo)
     }
 
     @Provides
     @ActivityRetainedScoped
-    fun deleteShopInfoUseCase(repo: ShopRepository): DeleteShopInfoUseCase{
+    fun deleteShopInfoUseCase(repo: ShopRepository): DeleteShopInfoUseCase {
         return DeleteShopInfoUseCase(repo)
     }
+
+    @Provides
+    @ActivityRetainedScoped
+    fun insertShopInfoUseCase(shop: ShopRepository, shopLabel: ShopLabelRepository): InsertShopInfoUseCase {
+        return InsertShopInfoUseCase(shop, shopLabel)
+    }
+
+    @Provides
+    @ActivityRetainedScoped
+    fun insertLabelInfoUseCase(repo: LabelRepository): InsertLabelInfoUseCase {
+        return InsertLabelInfoUseCase(repo)
+    }
+
+    @Provides
+    @ActivityRetainedScoped
+    fun insertShopLabelUseCase(repo: ShopLabelRepository): InsertShopLabelUseCase {
+        return InsertShopLabelUseCase(repo)
+    }
+
 
 }

@@ -10,8 +10,6 @@ interface ShopDataSource {
 
     suspend fun isShopDBEmpty(): Boolean
 
-    suspend fun getShopDetails(): List<ShopWithAllLabel>
-
     suspend fun getShop(id: String): Result<Shop>
 
     suspend fun insertShop(shop: Shop): List<Unit>

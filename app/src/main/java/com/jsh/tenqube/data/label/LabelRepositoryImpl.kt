@@ -3,9 +3,7 @@ package com.jsh.tenqube.data.label
 import com.jsh.tenqube.domain.repository.LabelRepository
 import com.jsh.tenqube.domain.Result
 import com.jsh.tenqube.domain.entity.DomainLabel.*
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -35,6 +33,14 @@ class LabelRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun insertLabel(label: Label) {
+        coroutineScope {
+            launch { localDataSource.insertLabel(label) }
+            launch { remoteDataSource.insertLabel(label) }
+        }
+
+    }
+
     private suspend fun fetchListFromRemoteOrLocal(){
         val remoteLabelData = remoteDataSource.getLabels()
 
@@ -44,17 +50,23 @@ class LabelRepositoryImpl @Inject constructor(
     }
 
     override suspend fun saveLabel(label: Label) {
-        TODO("Not yet implemented")
+        coroutineScope {
+            launch { localDataSource.updateLabel(label) }
+            launch { remoteDataSource.updateLabel(label) }
+        }
     }
 
 
-    override suspend fun deleteAllLabel() = withContext(ioDispatcher) {
-        return@withContext localDataSource.deleteAllLabel()
+    override suspend fun deleteAllLabel() {
+        coroutineScope {
+            launch { localDataSource.deleteAllLabel() }
+            launch { remoteDataSource.deleteAllLabel() }
+        }
     }
 
     private suspend fun refreshLocalDataSource(labelList: List<Label>) {
         for (label in labelList) {
-            localDataSource.saveLabel(label)
+            localDataSource.updateLabel(label)
         }
     }
 

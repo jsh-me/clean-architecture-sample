@@ -8,4 +8,9 @@ sealed class DomainShopLabel {
         var shop: Shop,
         var labels: List<Label>
     ) : DomainShopLabel()
+
+    data class SingleShopLabel(
+        var shopId: String,
+        var labelId: String
+    ): DomainShopLabel()
 }

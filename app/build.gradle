@@ -14,6 +14,7 @@ android {
         targetSdkVersion rootProject.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        //multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -23,8 +24,12 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-        debug { resValue("string", "PORT_NUMBER", "8080") }
+   //     debug { resValue("string", "PORT_NUMBER", "8080") }
 
+//        dexOptions {
+//            jumboMode true
+//            javaMaxHeapSize "4g"
+//        }
     }
 
     buildFeatures {

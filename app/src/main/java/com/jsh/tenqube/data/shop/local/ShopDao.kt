@@ -27,6 +27,4 @@ interface ShopDao{
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateShop(shop: LocalShopModel)
 
-
-
 }

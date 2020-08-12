@@ -4,11 +4,12 @@ import com.jsh.tenqube.data.api.TenqubeService
 import com.jsh.tenqube.data.label.LabelDataSource
 import com.jsh.tenqube.data.mapper.toDomainLabelList
 import com.jsh.tenqube.domain.Result
-import com.jsh.tenqube.domain.entity.DomainLabel
 import com.jsh.tenqube.domain.entity.DomainLabel.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentMap
 import javax.inject.Inject
 
 
@@ -17,27 +18,41 @@ class RemoteLabelDataSource @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ): LabelDataSource {
 
+    private var tenqubeServiceData: ConcurrentMap<String, Label>?= null
+
     override suspend fun getLabels(): Result<List<Label>> = withContext(ioDispatcher) {
         return@withContext try{
+            cacheLabels(tenqubeService.getLabels().results.toDomainLabelList())
             Result.Success((tenqubeService.getLabels().results).toDomainLabelList())
         } catch (e: Exception) {
             Result.Error(e)
         }
     }
 
-    override suspend fun saveLabel(label: Label) {
-        throw UnsupportedOperationException("unsupported operation")
+    override suspend fun updateLabel(label: Label) {
+        tenqubeServiceData?.set(label.id, label)
     }
 
     override suspend fun insertLabel(label: Label) {
-        throw UnsupportedOperationException("unsupported operation")
+        tenqubeServiceData?.put(label.id, label)
     }
 
-    override suspend fun isLabelDBEmpty(): Boolean {
-        throw UnsupportedOperationException("unsupported operation")
+    override suspend fun isLabelDBEmpty(): Boolean = withContext(ioDispatcher){
+        return@withContext tenqubeServiceData?.size == 0
     }
 
     override suspend fun deleteAllLabel() {
-        throw UnsupportedOperationException("unsupported operation")
+        tenqubeServiceData?.clear()
     }
+
+    private fun cacheLabels(results: List<Label>){
+        if(tenqubeServiceData == null){
+            tenqubeServiceData = ConcurrentHashMap()
+        }
+        results.map{
+            tenqubeServiceData?.put(it.id, it)
+        }
+    }
+
+
 }

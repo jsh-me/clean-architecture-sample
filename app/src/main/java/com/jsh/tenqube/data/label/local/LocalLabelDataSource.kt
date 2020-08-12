@@ -25,12 +25,12 @@ class LocalLabelDataSource @Inject constructor(
         }
     }
 
-    override suspend fun insertLabel(label: Label) {
-        database.labelDao().insertLabel(label.toDataLocalLabelModel())
+    override suspend fun insertLabel(label: Label) = withContext(ioDispatcher) {
+        return@withContext database.labelDao().insertLabel(label.toDataLocalLabelModel())
     }
 
-    override suspend fun saveLabel(label: Label) {
-        TODO("Not yet implemented")
+    override suspend fun updateLabel(label: Label) = withContext(ioDispatcher) {
+        return@withContext database.labelDao().updateLabel(label.toDataLocalLabelModel())
     }
 
     override suspend fun isLabelDBEmpty(): Boolean = withContext(ioDispatcher) {
@@ -38,6 +38,6 @@ class LocalLabelDataSource @Inject constructor(
     }
 
     override suspend fun deleteAllLabel() = withContext(ioDispatcher) {
-        return@withContext  database.labelDao().deleteAllLabels()
+        return@withContext database.labelDao().deleteAllLabels()
     }
 }

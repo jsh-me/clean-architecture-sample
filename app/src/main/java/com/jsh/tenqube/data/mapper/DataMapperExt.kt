@@ -2,16 +2,13 @@ package com.jsh.tenqube.data.mapper
 
 import com.jsh.tenqube.data.dto.LabelModel
 import com.jsh.tenqube.data.dto.ShopModel
-import com.jsh.tenqube.data.label.local.DataLabel
 import com.jsh.tenqube.data.label.local.DataLabel.*
 import com.jsh.tenqube.data.shop.local.DataShop
-import com.jsh.tenqube.data.shopAndLabel.DataShopLocal
 import com.jsh.tenqube.data.shopAndLabel.ShopWithAllLabel
-import com.jsh.tenqube.domain.entity.DomainLabel
+import com.jsh.tenqube.data.shopAndLabel.local.DataShopLocal
+import com.jsh.tenqube.data.shopAndLabel.local.DataShopLocal.LocalShopLabelModel
 import com.jsh.tenqube.domain.entity.DomainLabel.*
-import com.jsh.tenqube.domain.entity.DomainShop
 import com.jsh.tenqube.domain.entity.DomainShop.*
-import com.jsh.tenqube.domain.entity.DomainShopLabel
 import com.jsh.tenqube.domain.entity.DomainShopLabel.*
 
 
@@ -59,8 +56,14 @@ fun Shop.toLocalDataShopModel(): DataShop.LocalShopModel {
 }
 
 
-fun ShopLabel.toDataShopLabel(): ShopWithAllLabel {
+fun ShopLabel.toDataShopWithAllLabel(): ShopWithAllLabel {
     return ShopWithAllLabel(this.shop.toLocalDataShopModel(), this.labels.toDataLocalLabelList())
+}
+
+fun ShopLabel.toDataLocalShopLabelModel(): List<LocalShopLabelModel> {
+    return this.labels.map{
+        LocalShopLabelModel(this.shop.id, it.name)
+    }
 }
 
 fun ShopWithAllLabel.toDomainShopLabel(): ShopLabel {
@@ -71,4 +74,8 @@ fun List<ShopWithAllLabel>.toDomainShopLabelList(): List<ShopLabel> {
     return this.map{
         ShopLabel(it.shop.toLocalDomainShop(), it.shopLabels.toLocalDomainLabelList())
     }
+}
+
+fun SingleShopLabel.toDataShopLabel(): LocalShopLabelModel{
+    return LocalShopLabelModel(this.shopId, this.labelId)
 }

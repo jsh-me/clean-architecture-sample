@@ -1,11 +1,15 @@
 package com.jsh.tenqube.presentation.ui.second
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import com.jsh.tenqube.R
 import com.jsh.tenqube.databinding.ActivitySubBinding
+import com.jsh.tenqube.presentation.ui.first.FirstActivity
+import com.jsh.tenqube.presentation.util.toLoadUrl
 import com.jsh.tenqube.presentation.util.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,28 +31,34 @@ class SecondActivity : AppCompatActivity() {
 
     private fun initView(){
         with(viewModel){
-            setShopName(intent.getStringExtra("ShopName")?:"")
-            setShopId(intent.getStringExtra("ShopId")?:"")
-            setShopLabels(intent.getStringArrayListExtra(("ShopLabels"))?: arrayListOf())
-            setShopUrl(intent.getStringExtra("ShopUrl")?:"")
+            setShopInfo(intent.getStringArrayListExtra("shopInfo")?: arrayListOf("","","",""))
         }
     }
 
     private fun observeData() {
         viewModel.deleteButtonClicked.observe(this, Observer {
             Toast.makeText(this, "Delete Complete", Toast.LENGTH_LONG).show()
-            setResult(1200)
-            finish()
+            backToMain()
         })
 
         viewModel.editButtonClicked.observe(this, Observer {
             Toast.makeText(this, "Edit Complete", Toast.LENGTH_LONG).show()
-            setResult(1000)
-            finish()
+            backToMain()
+        })
+
+        viewModel.addButtonClicked.observe(this, Observer {
+            Toast.makeText(this, "Add Complete", Toast.LENGTH_LONG).show()
+            backToMain()
         })
 
         viewModel.addImageButtonClicked.observe(this, Observer {
-
+            binding.detailShopImage.toLoadUrl(resources.getString(R.string.testImage))
         })
+    }
+
+    private fun backToMain(){
+        val intent = Intent(this, FirstActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }

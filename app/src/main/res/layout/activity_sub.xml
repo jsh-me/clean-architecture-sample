@@ -78,26 +78,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/detail_shopImage" />
 
-<!--    <TextView-->
-<!--        android:id="@+id/LabelName_text"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:ems="10"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/shopName_edit"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/shopName_edit" />-->
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/secondRecycler"
+    <TextView
+        android:id="@+id/LabelName_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@{subViewModel.shopLabels}"
+        android:visibility="@{subViewModel.buttonVisibility ? view.VISIBLE : view.GONE}"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/shopName_edit"
+        app:layout_constraintTop_toBottomOf="@+id/shopName_edit" />
+
+    <EditText
+        android:id="@+id/LabelName_Edit"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="@={subViewModel.shopLabels}"
+        android:visibility="@{subViewModel.buttonVisibility ? view.GONE : view.VISIBLE}"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/shopName_edit"
-        android:visibility="@{subViewModel.buttonVisibility ? view.VISIBLE : view.GONE}"
-        bindLabelList="@{subViewModel.shopLabels}"
-        tools:itemCount="3"
-        tools:listitem="@layout/item_label_list" />
+        app:layout_constraintTop_toBottomOf="@+id/LabelName_text" />
 
     <Button
         android:id="@+id/add_button"

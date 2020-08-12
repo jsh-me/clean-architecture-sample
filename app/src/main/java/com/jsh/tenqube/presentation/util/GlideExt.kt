@@ -9,3 +9,10 @@ fun ImageView.toLoadUrl(url: String){
         .centerCrop()
         .into(this)
 }
+
+fun ImageView.toLoadDrawable(image: Int){
+    Glide.with(this)
+        .load(image)
+        .centerCrop()
+        .into(this)
+}

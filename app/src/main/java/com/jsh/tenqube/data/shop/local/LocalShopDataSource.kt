@@ -1,13 +1,10 @@
 package com.jsh.tenqube.data.shop.local
 
-import com.jsh.tenqube.data.shopAndLabel.ShopWithAllLabel
 import com.jsh.tenqube.data.mapper.*
 import com.jsh.tenqube.data.shop.ShopDataSource
 import com.jsh.tenqube.data.db.TenqubeDatabase
-import com.jsh.tenqube.data.shopAndLabel.DataShopLocal
-import com.jsh.tenqube.data.shopAndLabel.DataShopLocal.*
+import com.jsh.tenqube.data.shopAndLabel.local.DataShopLocal.*
 import com.jsh.tenqube.domain.Result
-import com.jsh.tenqube.domain.entity.DomainShop
 import com.jsh.tenqube.domain.entity.DomainShop.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -37,9 +34,6 @@ class LocalShopDataSource @Inject constructor(
         }
     }
 
-    override suspend fun getShopDetails(): List<ShopWithAllLabel> = withContext(ioDispatcher) {
-        database.shopLabelDao().getShopWithAllLabel()
-    }
 
     override suspend fun updateShop(shop: Shop) = withContext(ioDispatcher){
         database.shopDao().updateShop(shop.toLocalDataShopModel())

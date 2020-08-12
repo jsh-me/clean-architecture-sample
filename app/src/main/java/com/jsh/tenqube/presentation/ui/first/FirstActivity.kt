@@ -3,10 +3,10 @@ package com.jsh.tenqube.presentation.ui.first
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.jsh.tenqube.databinding.ActivityMainBinding
 import com.jsh.tenqube.presentation.ui.second.SecondActivity
 import com.jsh.tenqube.presentation.util.viewBinding
@@ -18,6 +18,7 @@ class FirstActivity : AppCompatActivity() {
 
     private val viewModel by viewModels<FirstViewModel>()
     private val binding by viewBinding(ActivityMainBinding::inflate)
+    private lateinit var listAdapter : MainAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,20 +27,23 @@ class FirstActivity : AppCompatActivity() {
 
         setupBinding()
         observeData()
-
+        setupListAdapter()
     }
-
 
     private fun setupBinding(){
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
-        binding.executePendingBindings()
     }
 
     private fun observeData(){
         viewModel.shopAndLabelList.observe(this, Observer {
+           // setupListAdapter()
             binding.mainRecycler.adapter?.notifyDataSetChanged()
             Timber.e("activity invoke")
+        })
+
+        viewModel.openShopListClicked.observe(this, Observer {
+            openShopDetails(it)
         })
 
         viewModel.addButtonClicked.observe(this, Observer {
@@ -48,18 +52,21 @@ class FirstActivity : AppCompatActivity() {
         })
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+    private fun openShopDetails(shopInfo: ArrayList<String>){
+        val intent = Intent(this@FirstActivity, SecondActivity::class.java)
+        intent.putExtra("shopInfo", shopInfo)
+        startActivity(intent)
+    }
 
-        if(requestCode == 1000) {
-            if (resultCode == 1000) {
-                Toast.makeText(this, "Edit", Toast.LENGTH_LONG).show()
-                binding.mainRecycler.adapter?.notifyDataSetChanged()
-            } else if (resultCode == 1200) {
-                Toast.makeText(this, "Delete", Toast.LENGTH_LONG).show()
-                binding.mainRecycler.adapter?.notifyDataSetChanged()
-
-            }
+    private fun setupListAdapter(){
+        val viewModel = binding.viewmodel
+        if(viewModel != null){
+            listAdapter = MainAdapter(viewModel)
+            binding.mainRecycler.layoutManager = LinearLayoutManager(this)
+            binding.mainRecycler.adapter = listAdapter
+            Timber.e("complete")
+        } else {
+            Timber.e("ViewModel not initialized when attempting to set up adapter.")
         }
     }
 

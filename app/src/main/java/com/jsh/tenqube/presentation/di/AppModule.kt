@@ -2,10 +2,7 @@ package com.jsh.tenqube.presentation.di
 
 import android.content.Context
 import androidx.room.Room
-import com.jsh.tenqube.data.network.HttpClient
-import com.jsh.tenqube.data.network.HttpClientNetwork
 import com.jsh.tenqube.data.network.RetrofitManager
-import com.jsh.tenqube.data.network.RetrofitManagerNetwork
 import com.jsh.tenqube.data.api.TenqubeService
 import com.jsh.tenqube.data.shop.local.LocalShopDataSource
 import com.jsh.tenqube.data.db.TenqubeDatabase
@@ -16,7 +13,11 @@ import com.jsh.tenqube.data.label.remote.RemoteLabelDataSource
 import com.jsh.tenqube.data.shop.ShopDataSource
 import com.jsh.tenqube.data.shop.ShopRepositoryImpl
 import com.jsh.tenqube.data.shop.remote.RemoteShopDataSource
+import com.jsh.tenqube.data.shopAndLabel.ShopLabelDataSource
+import com.jsh.tenqube.data.shopAndLabel.ShopLabelRepositoryImpl
+import com.jsh.tenqube.data.shopAndLabel.local.LocalShopLabelDataSource
 import com.jsh.tenqube.domain.repository.LabelRepository
+import com.jsh.tenqube.domain.repository.ShopLabelRepository
 import com.jsh.tenqube.domain.repository.ShopRepository
 import dagger.Module
 import dagger.Provides
@@ -31,7 +32,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(ApplicationComponent::class)
 object AppModule {
-
 
     @Qualifier
     @Retention(AnnotationRetention.RUNTIME)
@@ -90,6 +90,17 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun provideShopLabelDataSource(
+        database: TenqubeDatabase,
+        ioDispatcher: CoroutineDispatcher
+    ): ShopLabelDataSource {
+        return LocalShopLabelDataSource(
+            database, ioDispatcher
+        )
+    }
+
+    @Singleton
+    @Provides
     @remoteShop
     fun provideRemoteShopDataSource(
         service: TenqubeService,
@@ -114,15 +125,8 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideHttpClientService(): HttpClient {
-        return HttpClientNetwork()
-    }
+    fun provideRetrofitService() = RetrofitManager
 
-    @Singleton
-    @Provides
-    fun provideRetrofitService(okHttp: HttpClient): RetrofitManager {
-        return RetrofitManagerNetwork(okHttp)
-    }
 
     @Singleton
     @Provides
@@ -151,5 +155,13 @@ object RepositoryModule{
         ioDispatcher: CoroutineDispatcher
     ): LabelRepository {
         return LabelRepositoryImpl(remoteDataSource, localDataSource, ioDispatcher)
+    }
+
+    @Singleton
+    @Provides
+    fun provideShopLabelRepository(
+        shopLabelDataSource: ShopLabelDataSource
+    ): ShopLabelRepository {
+        return ShopLabelRepositoryImpl(shopLabelDataSource)
     }
 }

@@ -1,4 +1,4 @@
-package com.jsh.tenqube.data.shopAndLabel
+package com.jsh.tenqube.data.shopAndLabel.local
 
 import androidx.room.*
 

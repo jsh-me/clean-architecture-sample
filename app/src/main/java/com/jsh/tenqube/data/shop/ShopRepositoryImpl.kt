@@ -22,7 +22,7 @@ class ShopRepositoryImpl @Inject constructor(
             Timber.e("remoteDataSource shop available")
             remoteDataSource.getShops().let { result ->
                 if (result is Result.Success) {
-                    cacheShop(result.data)
+                    cacheShop(result.data.sortedBy { it.id })
 
                     return@withContext Result.Success(result.data)
                 } else Result.Error(Exception("Remote Illegal state"))
@@ -36,37 +36,6 @@ class ShopRepositoryImpl @Inject constructor(
             }
         }
     }
-
-//        return withContext(ioDispatcher){
-//            if(!localDataSource.isShopDBEmpty()){
-//                cachedShops?.let{ cachedTasks ->
-//                    return@withContext Result.Success(cachedTasks.values.sortedBy { it.id })
-//                }
-//            }
-//
-//            val newShops = fetchShopsFromRemoteOrLocal()
-//
-//            (newShops as? Result.Success)?.let { refreshCache(it.data) }
-//
-//            cachedShops?.values?.let{ tasks ->
-//                return@withContext Result.Success(tasks.sortedBy { it.id })
-//            }
-//
-//            (newShops as? Result.Success)?.let {
-//                if (it.data.isEmpty()) {
-//                    return@withContext Result.Success(it.data)
-//                }
-//            }
-//
-//            return@withContext Result.Error(java.lang.Exception("Illegal state"))
-//        }
-  //  }
-
-    //입출력이 존재할때 ioDIspatcher
-    override suspend fun getShopDetails(): List<ShopLabel> = withContext(ioDispatcher) {
-        localDataSource.getShopDetails().toDomainShopLabelList()
-    }
-
 
     override suspend fun fetchShopFromRemoteOrLocal(id: String): Result<DomainShop.Shop> {
         val remoteShopData = remoteDataSource.getShop(id)
@@ -88,11 +57,18 @@ class ShopRepositoryImpl @Inject constructor(
 
     override suspend fun updateShop(shop: DomainShop.Shop) {
         coroutineScope {
-            launch { localDataSource.insertShop(shop) }
-            launch { remoteDataSource.insertShop(shop) }
-        }
 
+            launch { localDataSource.updateShop(shop) }
+            launch { remoteDataSource.updateShop(shop) }
+        }
     }
+
+    override suspend fun insertShop(shop: DomainShop.Shop) {
+        coroutineScope {
+            launch { localDataSource.insertShop(shop) }
+           launch { remoteDataSource.insertShop(shop) }
+        }
+      }
 
     override suspend fun deleteShop(id: String) {
         coroutineScope {
@@ -124,13 +100,6 @@ class ShopRepositoryImpl @Inject constructor(
         if( localShopData is Result.Success) return localShopData
         return Result.Error(Exception("Error fetching from remote and local"))
     }
-
-//    private fun refreshCache(shops: List<Shop>){
-//        cachedShops?.clear()
-//        shops.sortedBy { it.id }.forEach{
-//            cacheAndPerform(it) {}
-//        }
-//    }
 
     private suspend fun refreshLocalDataSource(shopList: List<DomainShop.Shop>) {
         localDataSource.deleteAllShop()

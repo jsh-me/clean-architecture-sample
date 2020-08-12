@@ -1,24 +1,33 @@
 package com.jsh.tenqube.presentation.ui.second
 
-import androidx.databinding.ObservableField
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jsh.tenqube.domain.entity.DomainShop.Shop
-import com.jsh.tenqube.domain.usecase.DeleteShopInfoUseCase
-import com.jsh.tenqube.domain.usecase.UpdateShopInfoUseCase
+import com.jsh.tenqube.domain.usecase.*
 import com.jsh.tenqube.presentation.SingleLiveEvent
+import com.jsh.tenqube.presentation.entity.PresenterLabelEntity
+import com.jsh.tenqube.presentation.entity.PresenterShopEntity
+import com.jsh.tenqube.presentation.entity.PresenterShopLabel
+import com.jsh.tenqube.presentation.entity.PresenterShopLabelModel
+import com.jsh.tenqube.presentation.mapper.toDomainLabel
+import com.jsh.tenqube.presentation.mapper.toDomainShop
+import com.jsh.tenqube.presentation.mapper.toDomainShopLabel
 import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.collections.ArrayList
 
 class SecondViewModel @ViewModelInject constructor(
     private val updateShopInfoUseCase: UpdateShopInfoUseCase,
-    private val deleteShopInfoUseCase: DeleteShopInfoUseCase
+    private val deleteShopInfoUseCase: DeleteShopInfoUseCase,
+    private val insertShopInfoUseCase: InsertShopInfoUseCase,
+    private val insertLabelInfoUseCase: InsertLabelInfoUseCase,
+    private val insertShopLabelUseCase: InsertShopLabelUseCase
 ): ViewModel(){
     var shopName: MutableLiveData<String> = MutableLiveData()
     var shopId: MutableLiveData<String> = MutableLiveData()
     var shopUrl: MutableLiveData<String> = MutableLiveData()
-    var shopLabels: MutableLiveData<ArrayList<String>> = MutableLiveData()
+    var shopLabels: MutableLiveData<String> = MutableLiveData()
     var editButtonClicked: SingleLiveEvent<Void> = SingleLiveEvent()
     var deleteButtonClicked: SingleLiveEvent<Void> = SingleLiveEvent()
     var addImageButtonClicked: SingleLiveEvent<Void> = SingleLiveEvent()
@@ -38,13 +47,27 @@ class SecondViewModel @ViewModelInject constructor(
 
         viewModelScope.launch {
             updateShopInfoUseCase(
-                Shop(shopId.value!!, shopName.value!!, shopUrl.value!!, shopLabels.value!!)
+                PresenterShopEntity.PresenterShop(shopId = shopId.value!!, shopName = shopName.value!!, shopUrl = shopUrl.value!!, shopLabel = emptyList() ).toDomainShop()
             )
         }
     }
 
     fun addButtonClicked(){
+        val shopUUID = UUID.randomUUID().toString()
+        val labelUUID = UUID.randomUUID().toString()
         addButtonClicked.call()
+
+        viewModelScope.launch {
+            insertShopInfoUseCase(
+                PresenterShopEntity.PresenterShop(shopName = shopName.value!!, shopLabel = emptyList(), shopUrl = shopUrl.value!!, shopId = shopUUID).toDomainShop()
+            )
+            insertLabelInfoUseCase(
+                PresenterLabelEntity.PresenterLabel(id = labelUUID, name = shopLabels.value!!).toDomainLabel()
+            )
+            insertShopLabelUseCase(
+                PresenterShopLabelModel.PresenterShopLabel(shop = shopUUID, label = labelUUID).toDomainShopLabel()
+            )
+        }
     }
 
     fun addImageButtonClicked(){
@@ -55,20 +78,10 @@ class SecondViewModel @ViewModelInject constructor(
         return !shopName.value.isNullOrEmpty()
     }
 
-    fun setShopName(name: String){
-        shopName.value = name
+    fun setShopInfo(info: ArrayList<String>){
+        shopId.value = info[0]
+        shopName.value = info[2]
+        shopUrl.value = info[1]
+        shopLabels.value = info[3]
     }
-
-    fun setShopId(id: String){
-        shopId.value =id
-    }
-
-    fun setShopLabels(labels: ArrayList<String>){
-        shopLabels.value = labels
-    }
-
-    fun setShopUrl(url: String){
-        shopUrl.value = url
-    }
-
 }
