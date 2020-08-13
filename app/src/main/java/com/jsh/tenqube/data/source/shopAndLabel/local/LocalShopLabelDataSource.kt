@@ -1,12 +1,12 @@
-package com.jsh.tenqube.data.shopAndLabel.local
+package com.jsh.tenqube.data.source.shopAndLabel.local
 
 import com.jsh.tenqube.data.db.TenqubeDatabase
 import com.jsh.tenqube.data.mapper.toDataLocalShopLabelModel
 import com.jsh.tenqube.data.mapper.toDataShopLabel
 import com.jsh.tenqube.data.mapper.toDomainShopLabel
-import com.jsh.tenqube.data.shopAndLabel.local.DataShopLocal.LocalShopLabelModel
-import com.jsh.tenqube.data.shopAndLabel.ShopLabelDataSource
-import com.jsh.tenqube.data.shopAndLabel.ShopWithAllLabel
+import com.jsh.tenqube.data.source.shopAndLabel.local.DataShopLocal.LocalShopLabelModel
+import com.jsh.tenqube.data.source.shopAndLabel.ShopLabelDataSource
+import com.jsh.tenqube.data.source.shopAndLabel.ShopWithAllLabel
 import com.jsh.tenqube.domain.entity.DomainShop.Shop
 import com.jsh.tenqube.domain.entity.DomainShopLabel
 import kotlinx.coroutines.CoroutineDispatcher

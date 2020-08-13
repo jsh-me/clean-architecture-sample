@@ -1,9 +1,7 @@
-package com.jsh.tenqube.data.shop
+package com.jsh.tenqube.data.source.shop
 
-import com.jsh.tenqube.data.mapper.toDomainShopLabelList
-import com.jsh.tenqube.domain.Result
+import com.jsh.tenqube.domain.util.Result
 import com.jsh.tenqube.domain.entity.DomainShop
-import com.jsh.tenqube.domain.entity.DomainShopLabel.*
 import com.jsh.tenqube.domain.repository.ShopRepository
 import kotlinx.coroutines.*
 import timber.log.Timber
@@ -84,7 +82,7 @@ class ShopRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun fetchShopsFromRemoteOrLocal(): Result<List<DomainShop.Shop>>{
+    private suspend fun fetchShopsFromRemoteOrLocal(): Result<List<DomainShop.Shop>> {
         val remoteShopData = remoteDataSource.getShops()
 
         when( remoteShopData ){

@@ -1,10 +1,11 @@
-package com.jsh.tenqube.data.label.local
+package com.jsh.tenqube.data.source.label.local
 
-import com.jsh.tenqube.data.label.LabelDataSource
-import com.jsh.tenqube.domain.Result
-import com.jsh.tenqube.domain.Result.*
+import com.jsh.tenqube.data.source.label.LabelDataSource
+import com.jsh.tenqube.domain.util.Result
+import com.jsh.tenqube.domain.util.Result.*
 import com.jsh.tenqube.data.db.TenqubeDatabase
 import com.jsh.tenqube.data.mapper.toDataLocalLabelModel
+import com.jsh.tenqube.data.mapper.toDomainLabel
 import com.jsh.tenqube.data.mapper.toLocalDomainLabelList
 import com.jsh.tenqube.domain.entity.DomainLabel.*
 import kotlinx.coroutines.CoroutineDispatcher
@@ -23,6 +24,14 @@ class LocalLabelDataSource @Inject constructor(
         } catch (e: Exception) {
             Error(e)
         }
+    }
+
+    override suspend fun getLabel(id: String): Result<Label> = withContext(ioDispatcher) {
+        return@withContext try {
+            Success(database.labelDao().getLabelById(id).toDomainLabel())
+        } catch (e: Exception) {
+                Error(e)
+            }
     }
 
     override suspend fun insertLabel(label: Label) = withContext(ioDispatcher) {

@@ -1,21 +1,21 @@
-package com.jsh.tenqube.presentation.di
+package com.jsh.tenqube.di
 
 import android.content.Context
 import androidx.room.Room
 import com.jsh.tenqube.data.network.RetrofitManager
 import com.jsh.tenqube.data.api.TenqubeService
-import com.jsh.tenqube.data.shop.local.LocalShopDataSource
+import com.jsh.tenqube.data.source.shop.local.LocalShopDataSource
 import com.jsh.tenqube.data.db.TenqubeDatabase
-import com.jsh.tenqube.data.label.LabelDataSource
-import com.jsh.tenqube.data.label.LabelRepositoryImpl
-import com.jsh.tenqube.data.label.local.LocalLabelDataSource
-import com.jsh.tenqube.data.label.remote.RemoteLabelDataSource
-import com.jsh.tenqube.data.shop.ShopDataSource
-import com.jsh.tenqube.data.shop.ShopRepositoryImpl
-import com.jsh.tenqube.data.shop.remote.RemoteShopDataSource
-import com.jsh.tenqube.data.shopAndLabel.ShopLabelDataSource
-import com.jsh.tenqube.data.shopAndLabel.ShopLabelRepositoryImpl
-import com.jsh.tenqube.data.shopAndLabel.local.LocalShopLabelDataSource
+import com.jsh.tenqube.data.source.label.LabelDataSource
+import com.jsh.tenqube.data.source.label.LabelRepositoryImpl
+import com.jsh.tenqube.data.source.label.local.LocalLabelDataSource
+import com.jsh.tenqube.data.source.label.remote.RemoteLabelDataSource
+import com.jsh.tenqube.data.source.shop.ShopDataSource
+import com.jsh.tenqube.data.source.shop.ShopRepositoryImpl
+import com.jsh.tenqube.data.source.shop.remote.RemoteShopDataSource
+import com.jsh.tenqube.data.source.shopAndLabel.ShopLabelDataSource
+import com.jsh.tenqube.data.source.shopAndLabel.ShopLabelRepositoryImpl
+import com.jsh.tenqube.data.source.shopAndLabel.local.LocalShopLabelDataSource
 import com.jsh.tenqube.domain.repository.LabelRepository
 import com.jsh.tenqube.domain.repository.ShopLabelRepository
 import com.jsh.tenqube.domain.repository.ShopRepository
@@ -162,6 +162,8 @@ object RepositoryModule{
     fun provideShopLabelRepository(
         shopLabelDataSource: ShopLabelDataSource
     ): ShopLabelRepository {
-        return ShopLabelRepositoryImpl(shopLabelDataSource)
+        return ShopLabelRepositoryImpl(
+            shopLabelDataSource
+        )
     }
 }

@@ -1,7 +1,8 @@
-package com.jsh.tenqube.data.label.local
+package com.jsh.tenqube.data.source.label.local
 
 import androidx.room.*
-import com.jsh.tenqube.data.label.local.DataLabel.*
+import com.jsh.tenqube.data.source.label.local.DataLabel.*
+import com.jsh.tenqube.data.source.shop.local.DataShop
 
 @Dao
 interface LabelDao{
@@ -20,5 +21,8 @@ interface LabelDao{
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateLabel(label: LocalLabelModel)
+
+    @Query("SELECT * FROM label WHERE labelID=:labelId")
+    suspend fun getLabelById(labelId: String): LocalLabelModel
 
 }

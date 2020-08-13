@@ -55,6 +55,9 @@ class SecondViewModel @ViewModelInject constructor(
     fun addButtonClicked(){
         val shopUUID = UUID.randomUUID().toString()
         val labelUUID = UUID.randomUUID().toString()
+
+        if(shopName.value.isNullOrBlank())
+
         addButtonClicked.call()
 
         viewModelScope.launch {

@@ -1,4 +1,4 @@
-package com.jsh.tenqube.presentation.di
+package com.jsh.tenqube.di
 
 import com.jsh.tenqube.domain.repository.LabelRepository
 import com.jsh.tenqube.domain.repository.ShopLabelRepository

@@ -1,4 +1,4 @@
-package com.jsh.tenqube.data.shopAndLabel
+package com.jsh.tenqube.data.source.shopAndLabel
 
 import com.jsh.tenqube.data.mapper.toDomainShopLabelList
 import com.jsh.tenqube.domain.entity.DomainShop.*

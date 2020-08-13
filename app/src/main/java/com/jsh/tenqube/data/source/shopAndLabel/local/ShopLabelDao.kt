@@ -1,8 +1,8 @@
-package com.jsh.tenqube.data.shopAndLabel.local
+package com.jsh.tenqube.data.source.shopAndLabel.local
 
 import androidx.room.*
-import com.jsh.tenqube.data.shopAndLabel.local.DataShopLocal.LocalShopLabelModel
-import com.jsh.tenqube.data.shopAndLabel.ShopWithAllLabel
+import com.jsh.tenqube.data.source.shopAndLabel.local.DataShopLocal.LocalShopLabelModel
+import com.jsh.tenqube.data.source.shopAndLabel.ShopWithAllLabel
 
 @Dao
 interface ShopLabelDao{

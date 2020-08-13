@@ -1,7 +1,7 @@
-package com.jsh.tenqube.data.shop.local
+package com.jsh.tenqube.data.source.shop.local
 
 import androidx.room.*
-import com.jsh.tenqube.data.shop.local.DataShop.*
+import com.jsh.tenqube.data.source.shop.local.DataShop.*
 
 @Dao
 interface ShopDao{

@@ -1,8 +1,9 @@
-package com.jsh.tenqube.data.label
+package com.jsh.tenqube.data.source.label
 
 import com.jsh.tenqube.domain.repository.LabelRepository
-import com.jsh.tenqube.domain.Result
+import com.jsh.tenqube.domain.util.Result
 import com.jsh.tenqube.domain.entity.DomainLabel.*
+import com.jsh.tenqube.domain.entity.DomainShop
 import kotlinx.coroutines.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -31,6 +32,22 @@ class LabelRepositoryImpl @Inject constructor(
                 } else Result.Error(Exception("Local Illegal state"))
             }
         }
+    }
+
+    override suspend fun fetchListFromRemoteOrLocal(id: String): Result<Label> {
+        val remoteLabelData = remoteDataSource.getLabel(id)
+
+        when(remoteLabelData){
+            is Result.Error -> Timber.w("Remote data source fetch failed")
+            is Result.Success ->{
+                refreshLocalDataSource(remoteLabelData.data)
+                return remoteLabelData
+            }
+            else ->  throw IllegalStateException()
+        }
+        val localLabelData = localDataSource.getLabel(id)
+        if( localLabelData is Result.Success) return localLabelData
+        return Result.Error(Exception("Error fetching from remote and local"))
     }
 
     override suspend fun insertLabel(label: Label) {
@@ -68,6 +85,10 @@ class LabelRepositoryImpl @Inject constructor(
         for (label in labelList) {
             localDataSource.updateLabel(label)
         }
+    }
+
+    private suspend fun refreshLocalDataSource(label: Label) {
+        localDataSource.updateLabel(label)
     }
 
 

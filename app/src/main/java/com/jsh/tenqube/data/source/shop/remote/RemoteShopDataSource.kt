@@ -1,11 +1,9 @@
-package com.jsh.tenqube.data.shop.remote
+package com.jsh.tenqube.data.source.shop.remote
 
 import com.jsh.tenqube.data.api.TenqubeService
-import com.jsh.tenqube.data.shopAndLabel.ShopWithAllLabel
 import com.jsh.tenqube.data.mapper.toDomainShopList
-import com.jsh.tenqube.data.shop.ShopDataSource
-import com.jsh.tenqube.domain.Result
-import com.jsh.tenqube.domain.entity.DomainShop
+import com.jsh.tenqube.data.source.shop.ShopDataSource
+import com.jsh.tenqube.domain.util.Result
 import com.jsh.tenqube.domain.entity.DomainShop.Shop
 import kotlinx.coroutines.*
 import java.util.concurrent.ConcurrentHashMap

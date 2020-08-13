@@ -1,9 +1,9 @@
-package com.jsh.tenqube.data.label.remote
+package com.jsh.tenqube.data.source.label.remote
 
 import com.jsh.tenqube.data.api.TenqubeService
-import com.jsh.tenqube.data.label.LabelDataSource
+import com.jsh.tenqube.data.source.label.LabelDataSource
 import com.jsh.tenqube.data.mapper.toDomainLabelList
-import com.jsh.tenqube.domain.Result
+import com.jsh.tenqube.domain.util.Result
 import com.jsh.tenqube.domain.entity.DomainLabel.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -25,6 +25,14 @@ class RemoteLabelDataSource @Inject constructor(
             cacheLabels(tenqubeService.getLabels().results.toDomainLabelList())
             Result.Success((tenqubeService.getLabels().results).toDomainLabelList())
         } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
+    override suspend fun getLabel(id: String): Result<Label> = withContext(ioDispatcher) {
+        return@withContext try{
+            Result.Success(tenqubeServiceData?.get(id)!!)
+        } catch (e: java.lang.Exception) {
             Result.Error(e)
         }
     }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.jsh.tenqube.domain
+package com.jsh.tenqube.domain.util
 
 
 /**

@@ -1,10 +1,10 @@
-package com.jsh.tenqube.data.shop.local
+package com.jsh.tenqube.data.source.shop.local
 
 import com.jsh.tenqube.data.mapper.*
-import com.jsh.tenqube.data.shop.ShopDataSource
+import com.jsh.tenqube.data.source.shop.ShopDataSource
 import com.jsh.tenqube.data.db.TenqubeDatabase
-import com.jsh.tenqube.data.shopAndLabel.local.DataShopLocal.*
-import com.jsh.tenqube.domain.Result
+import com.jsh.tenqube.data.source.shopAndLabel.local.DataShopLocal.*
+import com.jsh.tenqube.domain.util.Result
 import com.jsh.tenqube.domain.entity.DomainShop.*
 import kotlinx.coroutines.*
 import timber.log.Timber

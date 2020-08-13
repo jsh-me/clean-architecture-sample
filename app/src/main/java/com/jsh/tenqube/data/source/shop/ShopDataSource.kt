@@ -1,7 +1,6 @@
-package com.jsh.tenqube.data.shop
+package com.jsh.tenqube.data.source.shop
 
-import com.jsh.tenqube.data.shopAndLabel.ShopWithAllLabel
-import com.jsh.tenqube.domain.Result
+import com.jsh.tenqube.domain.util.Result
 import com.jsh.tenqube.domain.entity.DomainShop.*
 
 interface ShopDataSource {
