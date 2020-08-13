@@ -1,7 +1,5 @@
 package com.jsh.tenqube.presentation.entity
 
-import com.jsh.tenqube.domain.entity.DomainLabel.*
-import com.jsh.tenqube.domain.entity.DomainShop.*
 import com.jsh.tenqube.presentation.entity.PresenterLabelEntity.PresenterLabel
 import com.jsh.tenqube.presentation.entity.PresenterShopEntity.PresenterShop
 

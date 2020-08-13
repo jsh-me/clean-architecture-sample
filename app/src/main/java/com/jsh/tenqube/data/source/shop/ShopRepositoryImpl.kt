@@ -13,8 +13,6 @@ class ShopRepositoryImpl @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ): ShopRepository {
 
-    //rivate var cachedShops: ConcurrentMap<String, DomainShop.Shop>? = null
-
     override suspend fun getShops(): Result<List<DomainShop.Shop>> = withContext(ioDispatcher) {
         if (localDataSource.isShopDBEmpty()) {
             Timber.e("remoteDataSource shop available")
@@ -117,21 +115,4 @@ class ShopRepositoryImpl @Inject constructor(
             localDataSource.insertShop(it)
         }
     }
-
-   // private fun getShopWithId(id: String) = cachedShops?.get(id)
-
-//    private fun cacheShop(shop: Shop): Shop {
-//        val cachedShop = Shop(shop.id, shop.name, shop.imgUrl, shop.labelIds)
-//
-//        if(cachedShops == null){
-//            cachedShops = ConcurrentHashMap()
-//        }
-//        cachedShops?.put(cachedShop.id, cachedShop)
-//        return cachedShop
-//    }
-
-//    private inline fun cacheAndPerform(shop: Shop, perform: (Shop) -> Unit){
-//        val cachedShop = cacheShop(shop)
-//        perform(cachedShop)
-//    }
 }

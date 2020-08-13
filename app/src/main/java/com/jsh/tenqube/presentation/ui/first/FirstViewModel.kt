@@ -24,13 +24,7 @@ class FirstViewModel  @ViewModelInject constructor(
 
 
     init {
-        //deleteAll()
         initData()
-    }
-
-    private fun deleteAll() = viewModelScope.launch {
-        deleteAllShopUseCase()
-        deleteAllLabelUseCase()
     }
 
     private fun initData() = viewModelScope.launch {

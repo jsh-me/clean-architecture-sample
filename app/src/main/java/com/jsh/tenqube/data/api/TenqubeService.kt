@@ -11,7 +11,4 @@ interface TenqubeService {
 
     @GET("shops")
     suspend fun getShops(): ShopResponse
-
-    @GET("shops/{id}")
-    suspend fun getShops(@Query("id") id: String): ShopResponse
 }
