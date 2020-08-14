@@ -12,6 +12,7 @@ interface LabelDao{
     @Query("SELECT * FROM label")
     suspend fun getLabels(): List<LocalLabelModel>
 
+    @Transaction
     @Query("DELETE FROM label")
     suspend fun deleteAllLabels()
 

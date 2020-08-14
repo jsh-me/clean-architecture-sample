@@ -100,8 +100,8 @@ class SecondViewModel @ViewModelInject constructor(
 
     fun setShopInfo(info: ArrayList<String>){
         _shopId.value = info[0]
-        shopName.value = info[2]
         shopUrl.value = info[1]
+        shopName.value = info[2]
         shopLabels.value = info[3]
     }
 }

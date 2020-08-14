@@ -16,12 +16,14 @@ interface ShopDao{
     @Query("SELECT * FROM shop WHERE shopId= :shopId")
     suspend fun getShopById(shopId: String): LocalShopModel
 
+    @Transaction
     @Query("DELETE FROM shop WHERE shopId= :shopId")
     suspend fun deleteShopById(shopId: String)
 
     @Query("SELECT count(*) FROM shop")
     suspend fun isShopDBEmpty(): Int
 
+    @Transaction
     @Query("DELETE FROM shop")
     suspend fun deleteAllShops()
 
@@ -35,6 +37,7 @@ interface ShopDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertShopWithLabel(shopLabel: LocalShopLabelModel)
 
+    @Transaction
     @Query("DELETE FROM shopLabel")
     fun deleteAllShopLabel()
 

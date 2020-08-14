@@ -16,13 +16,6 @@ fun List<LabelModel>.toDomainLabelList(): List<Label>{
     }
 }
 
-//우선 label id 만 넣는당.
-fun List<ShopModel>.toDomainShopList(): List<Shop>{
-    return this.map{
-        Shop(it.id, it.name, it.imgUrl, it.labelIds.map { id -> Label(id, "") })
-    }
-}
-
 fun List<LocalLabelModel>.toLocalDomainLabelList(): List<Label>{
     return this.map{
         Label(it.id, it.name)
