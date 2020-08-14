@@ -47,10 +47,6 @@ class ShopRepositoryImpl @Inject constructor(
     }
 
     //shop과 label의 정보를 모두 가져온다.
-//    override suspend fun getShopDetails(): Result<List<ShopWithAllLabel>> = withContext(ioDispatcher) {
-//        return@withContext localDataSource.getShopDetails()
-//    }
-
     override suspend fun getShopDetails(): Result<List<Shop>> = withContext(ioDispatcher) {
         return@withContext localDataSource.getShopDetails()
     }
@@ -73,67 +69,91 @@ class ShopRepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun updateShop(shop: Shop) {
-        coroutineScope {
-            launch { localDataSource.updateShop(shop) }
-            launch { remoteDataSource.updateShop(shop) }
+    override suspend fun updateShop(shop: Shop): Result<Unit> {
+       return coroutineScope {
+            try {
+                launch { localDataSource.updateShop(shop) }
+                launch { remoteDataSource.updateShop(shop) }
+                Success(Unit)
+            } catch (e: Exception) {
+                Error(e)
+            }
         }
     }
 
     //insert시 LocalShop과 LocalLabel 에 값이 들어가게된다.
-    override suspend fun insertShop(shop: Shop) {
-        coroutineScope {
-            launch {
-                localDataSource.insertShop(shop)
-                localDataSource.insertShopLabels(shop) } //Shop ID만 LocalShopLabel 에 저장
-           launch {
-                remoteDataSource.insertShop(shop)
-                remoteDataSource.insertShopLabels(shop) }
+    override suspend fun insertShop(shop: Shop): Result<Unit> = withContext(ioDispatcher) {
+        return@withContext coroutineScope {
+            try {
+                launch {
+                    localDataSource.insertShop(shop)
+                    localDataSource.insertShopLabels(shop)
+                } //Shop ID만 LocalShopLabel 에 저장
+                launch {
+                    remoteDataSource.insertShop(shop)
+                    remoteDataSource.insertShopLabels(shop)
+                }
+                cachedShops?.put(shop.id, shop)
+                Success(Unit)
+            }catch (e: Exception) {
+                Error(e)
+            }
         }
-        cachedShops?.put(shop.id, shop)
       }
 
 
-    override suspend fun deleteShop(id: String) {
-        coroutineScope {
-            launch { localDataSource.deleteShop(id) }
-            launch { remoteDataSource.deleteShop(id) }
+    override suspend fun deleteShop(id: String): Result<Unit> = withContext(ioDispatcher) {
+        return@withContext coroutineScope {
+            try {
+                launch { localDataSource.deleteShop(id) }
+                launch { remoteDataSource.deleteShop(id) }
+                cachedShops?.remove(id)
+                Success(Unit)
+            } catch (e: Exception) {
+                Error(e)
+            }
         }
-        cachedShops?.remove(id)
     }
 
     //shop과 ShopLabel 값을 전부 삭제한다.
-    override suspend fun deleteAllShop() {
-        coroutineScope {
-            launch {
-                localDataSource.deleteAllShop()
-                localDataSource.deleteAllShopLabels() }
-            launch {
-                remoteDataSource.deleteAllShop()
-                remoteDataSource.deleteAllShopLabels() }
+    override suspend fun deleteAllShop(): Result<Unit> = withContext(ioDispatcher) {
+        return@withContext coroutineScope {
+            try {
+                launch {
+                    localDataSource.deleteAllShop()
+                    localDataSource.deleteAllShopLabels()
+                }
+                launch {
+                    remoteDataSource.deleteAllShop()
+                    remoteDataSource.deleteAllShopLabels()
+                }
+                cachedShops?.clear()
+                Success(Unit)
+            } catch (e: Exception) {
+                Error(e)
+            }
         }
-        cachedShops?.clear()
     }
 
-    private suspend fun fetchShops(isUpdated: Boolean): Result<List<Shop>> {
+    private suspend fun fetchShops(isUpdated: Boolean): Result<List<Shop>>  = withContext(ioDispatcher) {
         val remoteShopData = remoteDataSource.getShops()
 
         when( remoteShopData ){
             is Error -> Timber.w("Remote data source fetch failed")
             is Success -> {
                 refreshLocalDataSource(remoteShopData.data)
-                return remoteShopData
+                return@withContext remoteShopData
             }
             else ->  throw IllegalStateException()
         }
 
         if (isUpdated) {
-            return Error(Exception("Can't force refresh: remote data source is unavailable"))
+            return@withContext Error(Exception("Can't force refresh: remote data source is unavailable"))
         }
 
         val localShopData = localDataSource.getShops()
-        if( localShopData is Success) return localShopData
-        return Error(Exception("Error fetching from remote and local"))
+        if( localShopData is Success) return@withContext localShopData
+        return@withContext Error(Exception("Error fetching from remote and local"))
     }
 
     private fun refreshCache(shops: List<Shop>){
@@ -143,7 +163,7 @@ class ShopRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun refreshLocalDataSource(shopList: List<Shop>) {
+    private suspend fun refreshLocalDataSource(shopList: List<Shop>) = withContext(ioDispatcher) {
         localDataSource.deleteAllShop()
         for (shop in shopList) {
             localDataSource.insertShop(shop)
@@ -151,7 +171,7 @@ class ShopRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun refreshLocalDataSource(shop: Shop) {
+    private suspend fun refreshLocalDataSource(shop: Shop) = withContext(ioDispatcher){
         localDataSource.insertShop(shop)
         localDataSource.insertShopLabels(shop)
     }

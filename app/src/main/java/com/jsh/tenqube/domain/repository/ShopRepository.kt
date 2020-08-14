@@ -12,16 +12,12 @@ interface ShopRepository {
 
     suspend fun getShopDetails(): Result<List<Shop>>
 
-    //suspend fun updateShopLabels(shopLabel: SingleShopLabel)
+    suspend fun updateShop(shop: Shop): Result<Unit>
 
-    //suspend fun fetchShopFromRemoteOrLocal(id: String): Result<Shop>
+    suspend fun insertShop(shop: Shop): Result<Unit>
 
-    suspend fun updateShop(shop: Shop)
+    suspend fun deleteShop(id: String): Result<Unit>
 
-    suspend fun insertShop(shop: Shop)
-
-    suspend fun deleteShop(id: String)
-
-    suspend fun deleteAllShop()
+    suspend fun deleteAllShop(): Result<Unit>
 
 }

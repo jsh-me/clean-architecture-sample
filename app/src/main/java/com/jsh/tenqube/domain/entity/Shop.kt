@@ -8,6 +8,6 @@ sealed class DomainShop {
         var id: String,
         var name: String,
         var imgUrl: String,
-        var labels: List<Label>
+        var labels: List<Label> ?= null
     ): DomainShop()
 }

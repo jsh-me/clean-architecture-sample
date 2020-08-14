@@ -13,7 +13,7 @@ class InsertShopUseCase (
     suspend operator fun invoke(shop: Shop) {
         Timber.e("insert success")
         shopRepository.insertShop(shop)
-        shop.labels.map{
+        shop.labels?.map{
             labelRepository.insertLabel(Label(it.id, it.name))
         }
     }

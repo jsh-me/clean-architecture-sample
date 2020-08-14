@@ -1,5 +1,6 @@
 package com.jsh.tenqube.presentation.ui.second
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -36,18 +37,30 @@ class SecondActivity : AppCompatActivity() {
 
     private fun observeData() {
         viewModel.deleteButtonClicked.observe(this, Observer {
-            Toast.makeText(this, "Delete Complete", Toast.LENGTH_LONG).show()
-            backToMain()
+            if(it == true) {
+                Toast.makeText(this, "Delete Complete", Toast.LENGTH_SHORT).show()
+                backToMain()
+            } else {
+                Toast.makeText(this, "Delete Error", Toast.LENGTH_SHORT).show()
+            }
         })
 
         viewModel.editButtonClicked.observe(this, Observer {
-            Toast.makeText(this, "Edit Complete", Toast.LENGTH_LONG).show()
-            backToMain()
+            if(it == true){
+                Toast.makeText(this, "Edit Complete", Toast.LENGTH_SHORT).show()
+                backToMain()
+            } else {
+                Toast.makeText(this, "Edit Error", Toast.LENGTH_SHORT).show()
+            }
         })
 
         viewModel.addButtonClicked.observe(this, Observer {
-            Toast.makeText(this, "Add Complete", Toast.LENGTH_LONG).show()
-            backToMain()
+            if(it == true) {
+                Toast.makeText(this, "Add Complete", Toast.LENGTH_SHORT).show()
+                backToMain()
+            } else {
+                Toast.makeText(this, "Add Error", Toast.LENGTH_SHORT).show()
+            }
         })
 
         viewModel.addImageButtonClicked.observe(this, Observer {

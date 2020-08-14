@@ -35,14 +35,6 @@ class LocalShopDataSource @Inject constructor(
         }
     }
 
-//    override suspend fun getShopDetails(): Result<List<ShopWithAllLabel>> = withContext(ioDispatcher) {
-//        return@withContext try {
-//                Result.Success(shopDao.getShopWithAllLabel())
-//            } catch (e: Exception) {
-//                Result.Error(e)
-//            }
-//    }
-
     override suspend fun getShopDetails(): Result<List<Shop>> = withContext(ioDispatcher) {
         shopDao.getShopWithAllLabel().let {
             return@withContext Success(it.map {
@@ -57,7 +49,7 @@ class LocalShopDataSource @Inject constructor(
 
     override suspend fun insertShopLabels(shop: Shop) {
         coroutineScope {
-            launch { shop.labels.map {
+            launch { shop.labels?.map {
                 shopDao.insertShopWithLabel(LocalShopLabelModel(shop.id, it.id)) }
             }
         }
@@ -67,29 +59,37 @@ class LocalShopDataSource @Inject constructor(
         shopDao.deleteAllShopLabel()
     }
 
-    override suspend fun updateShop(shop: Shop) = withContext(ioDispatcher){
-        shopDao.updateShop(shop.toLocalDataShopModel())
+    override suspend fun updateShop(shop: Shop): Result<Unit> = withContext(ioDispatcher){
+       return@withContext try{
+           Success(shopDao.updateShop(shop.toLocalDataShopModel()))
+       }catch (e: Exception) {
+           Error(e)
+       }
     }
 
 
-    override suspend fun deleteShop(id: String) = withContext(ioDispatcher){
-        shopDao.deleteShopById(id)
+    override suspend fun deleteShop(id: String): Result<Unit> = withContext(ioDispatcher){
+        return@withContext try {
+            Success(shopDao.deleteShopById(id))
+        }catch (e: Exception) {
+            Error(e)
+        }
     }
 
-    override suspend fun deleteAllShop() = withContext(ioDispatcher) {
-        shopDao.deleteAllShops()
-        Timber.e("All Delete Completed")
+    override suspend fun deleteAllShop(): Result<Unit> = withContext(ioDispatcher) {
+        return@withContext try{
+            Timber.e("All Delete Completed")
+            Success(shopDao.deleteAllShops())
+        }catch (e: Exception) {
+            Error(e)
+        }
     }
 
-    //shop
-    override suspend fun insertShop(shop: Shop) {
-        coroutineScope {
-            shopDao.insertShop(shop.toLocalDataShopModel())
-//            launch {
-//                shop.labelIds.map {
-//                    database.shopLabelDao().insertShopWithLabel(
-//                        LocalShopLabelModel(shop.id, it)) }
-//            }
+    override suspend fun insertShop(shop: Shop): Result<Unit> = withContext(ioDispatcher) {
+        return@withContext try{
+            Success(shopDao.insertShop(shop.toLocalDataShopModel()))
+        } catch (e: Exception) {
+            Error(e)
         }
     }
 

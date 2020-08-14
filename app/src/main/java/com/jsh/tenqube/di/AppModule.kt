@@ -91,10 +91,11 @@ object AppModule {
     @remoteShop
     fun provideRemoteShopDataSource(
         service: TenqubeService,
+        labelDataSource: LocalLabelDataSource,
         ioDispatcher: CoroutineDispatcher
     ): ShopDataSource {
         return RemoteShopDataSource(
-            service, ioDispatcher
+            service, labelDataSource, ioDispatcher
         )
     }
 

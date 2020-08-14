@@ -10,6 +10,7 @@ import com.jsh.tenqube.data.source.shop.local.ShopDao
 
 @Database(entities = [LocalShopModel::class, LocalLabelModel::class, LocalShopLabelModel::class], version = 1, exportSchema = false)
 abstract class TenqubeDatabase: RoomDatabase() {
+
     abstract fun shopDao(): ShopDao
 
     abstract fun labelDao(): LabelDao

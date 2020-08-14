@@ -57,31 +57,3 @@ fun DataShop.LocalShopModel.toLocalDomainShop(): Shop {
 fun Shop.toLocalDataShopModel(): DataShop.LocalShopModel {
     return DataShop.LocalShopModel(id = this.id, shopName = this.name, shopUrl = this.imgUrl)
 }
-
-//
-//fun ShopLabel.toDataShopWithAllLabel(): ShopWithAllLabel {
-//    return ShopWithAllLabel(
-//        this.shop.toLocalDataShopModel(),
-//        this.labels.toDataLocalLabelList()
-//    )
-//}
-//
-//fun ShopLabel.toDataLocalShopLabelModel(): List<LocalShopLabelModel> {
-//    return this.labels.map{
-//        LocalShopLabelModel(this.shop.id, it.name)
-//    }
-//}
-//
-//fun ShopWithAllLabel.toDomainShopLabel(): ShopLabel {
-//    return ShopLabel(this.shop.toLocalDomainShop(), this.shopLabels.toLocalDomainLabelList())
-//}
-//
-//fun List<ShopWithAllLabel>.toDomainShopLabelList(): List<ShopLabel> {
-//    return this.map{
-//        ShopLabel(it.shop.toLocalDomainShop(), it.shopLabels.toLocalDomainLabelList())
-//    }
-//}
-//
-//fun SingleShopLabel.toDataShopLabel(): LocalShopLabelModel{
-//    return LocalShopLabelModel(this.shopId, this.labelId)
-//}

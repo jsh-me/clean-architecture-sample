@@ -12,102 +12,102 @@
             type="android.view.View" />
     </data>
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="16dp"
-    tools:context=".presentation.ui.second.SecondActivity">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="16dp"
+        tools:context=".presentation.ui.second.SecondActivity">
 
-    <Button
-        android:id="@+id/add_image_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="@{() -> subViewModel.addImageButtonClicked()}"
-        android:text="ADD IMAGE"
-        app:layout_constraintBottom_toTopOf="@+id/detail_shopImage"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <Button
+            android:id="@+id/add_image_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> subViewModel.addImageButtonClicked()}"
+            android:text="ADD IMAGE"
+            app:layout_constraintBottom_toTopOf="@+id/detail_shopImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/detail_shopImage"
-        bindImage="@{subViewModel.shopUrl}"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginBottom="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        <ImageView
+            android:id="@+id/detail_shopImage"
+            bindImage="@{subViewModel.shopUrl}"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
 
-    <Button
-        android:id="@+id/delete_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="117dp"
-        android:text="delete"
-        android:onClick="@{() -> subViewModel.deleteButtonClicked()}"
-        android:visibility="@{subViewModel.buttonVisibility ? view.VISIBLE : view.GONE}"
-        app:layout_constraintBottom_toBottomOf="@+id/update_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/update_button" />
+        <Button
+            android:id="@+id/delete_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="117dp"
+            android:text="delete"
+            android:onClick="@{() -> subViewModel.deleteButtonClicked()}"
+            android:visibility="@{subViewModel.buttonVisibility ? view.VISIBLE : view.GONE}"
+            app:layout_constraintBottom_toBottomOf="@+id/update_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/update_button" />
 
-    <Button
-        android:id="@+id/update_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="update"
-        android:onClick="@{() -> subViewModel.editButtonClicked()}"
-        android:visibility="@{subViewModel.buttonVisibility ? view.VISIBLE : view.GONE}"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/delete_btn"
-        app:layout_constraintStart_toStartOf="parent" />
+        <Button
+            android:id="@+id/update_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="update"
+            android:onClick="@{() -> subViewModel.editButtonClicked()}"
+            android:visibility="@{subViewModel.buttonVisibility ? view.VISIBLE : view.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/delete_btn"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
-        android:id="@+id/shopName_edit"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="@={subViewModel.shopName}"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detail_shopImage" />
+        <EditText
+            android:id="@+id/shopName_edit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="@={subViewModel.shopName}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detail_shopImage" />
 
-    <TextView
-        android:id="@+id/LabelName_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@{subViewModel.shopLabels}"
-        android:visibility="@{subViewModel.buttonVisibility ? view.VISIBLE : view.GONE}"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/shopName_edit"
-        app:layout_constraintTop_toBottomOf="@+id/shopName_edit" />
+        <TextView
+            android:id="@+id/LabelName_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@={subViewModel.shopLabels}"
+            android:visibility="@{subViewModel.buttonVisibility ? view.VISIBLE : view.GONE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/shopName_edit"
+            app:layout_constraintTop_toBottomOf="@+id/shopName_edit" />
 
-    <EditText
-        android:id="@+id/LabelName_Edit"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:text="@={subViewModel.shopLabels}"
-        android:visibility="@{subViewModel.buttonVisibility ? view.GONE : view.VISIBLE}"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LabelName_text" />
+        <EditText
+            android:id="@+id/LabelName_Edit"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@={subViewModel.shopLabels}"
+            android:visibility="@{subViewModel.buttonVisibility ? view.GONE : view.VISIBLE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/LabelName_text" />
 
-    <Button
-        android:id="@+id/add_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:onClick="@{() -> subViewModel.addButtonClicked()}"
-        android:text="ADD"
-        android:visibility="@{subViewModel.buttonVisibility ? view.GONE : view.VISIBLE}"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/add_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:onClick="@{() -> subViewModel.addButtonClicked()}"
+            android:text="ADD"
+            android:visibility="@{subViewModel.buttonVisibility ? view.GONE : view.VISIBLE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

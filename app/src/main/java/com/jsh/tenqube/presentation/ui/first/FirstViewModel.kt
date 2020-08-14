@@ -21,8 +21,8 @@ class FirstViewModel  @ViewModelInject constructor(
     private val _shopAndLabelList = MutableLiveData<List<PresenterShop>>()
     val shopAndLabelList: LiveData<List<PresenterShop>> = _shopAndLabelList
 
-    val addButtonClicked: SingleLiveEvent<Void> = SingleLiveEvent()
-    val openShopListClicked: SingleLiveEvent<ArrayList<String>> = SingleLiveEvent()
+    var addButtonClicked: SingleLiveEvent<Void> = SingleLiveEvent()
+    var openShopListClicked: SingleLiveEvent<ArrayList<String>> = SingleLiveEvent()
 
     init {
         initData()

@@ -1,21 +1,13 @@
 package com.jsh.tenqube.presentation.mapper
 
 import com.jsh.tenqube.domain.entity.DomainLabel.*
-import com.jsh.tenqube.domain.entity.DomainShop
 import com.jsh.tenqube.domain.entity.DomainShop.*
 import com.jsh.tenqube.presentation.entity.PresenterLabelEntity.*
 import com.jsh.tenqube.presentation.entity.PresenterShopEntity.*
-import java.util.*
-
-//fun List<ShopLabel>.toPresenterShopLabelList(): List<PresenterShopLabelList>{
-//    return this.map{
-//        PresenterShopLabelList(it.shop.toPresenterShop(), it.labels.toPresenterLabelList())
-//    }
-//}
 
 fun List<Shop>.toPresenterShopList(): List<PresenterShop>{
     return this.map{
-        PresenterShop(it.id, it.name, it.imgUrl, it.labels.toPresenterLabelList())
+        PresenterShop(it.id, it.name, it.imgUrl, it.labels?.toPresenterLabelList())
     }
 }
 
@@ -40,17 +32,13 @@ fun List<List<Label>>.toPresenterLabelListList(): List<List<PresenterLabel>>{
 }
 
 fun PresenterShop.toDomainShop(): Shop {
-    return Shop(this.shopId, this.shopName, this.shopUrl, this.shopLabel!!.toDomainLabelList())
+    return Shop(this.shopId, this.shopName, this.shopUrl, this.shopLabel?.toDomainLabelList())
 }
 
 fun Shop.toPresenterShop(): PresenterShop {
-    return PresenterShop(shopId = this.id, shopName = this.name, shopUrl = this.imgUrl, shopLabel = this.labels.toPresenterLabelList())
+    return PresenterShop(shopId = this.id, shopName = this.name, shopUrl = this.imgUrl, shopLabel = this.labels?.toPresenterLabelList())
 }
 
 fun PresenterLabel.toDomainLabel(): Label{
     return Label(this.id, this.name)
 }
-
-//fun PresenterShopLabelModel.PresenterShopLabel.toDomainShopLabel(): SingleShopLabel {
-//    return SingleShopLabel(this.shop, this.label)
-//}
