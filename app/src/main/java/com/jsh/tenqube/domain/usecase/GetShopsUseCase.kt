@@ -11,16 +11,9 @@ class GetShopsUseCase (
 ) {
     suspend operator fun invoke(isUpdated: Boolean = false): Result<List<Shop>> {
 
-        when(labelRepository.getLabels(isUpdated)){
+        return when (labelRepository.getLabels(isUpdated)) {
             is Result.Success -> shopRepository.getShops(isUpdated)
-            is Result.Error -> Result.Error(Exception("Load Failed"))
+            else -> Result.Error(Exception("Load Failed"))
         }
-
-        shopRepository.getShopDetails().let{
-            if( it is Result.Success ){
-                return it
-            }
-        }
-        return Result.Error(Exception("Load Shop Error"))
     }
 }

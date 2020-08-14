@@ -65,7 +65,7 @@ class MainAdapter(private val viewModel: FirstViewModel):
  */
 class ShopDiffCallback : DiffUtil.ItemCallback<PresenterShop>() {
     override fun areItemsTheSame(oldItem: PresenterShop, newItem: PresenterShop): Boolean {
-        return (oldItem.shopId == newItem.shopId) && (oldItem.shopName == newItem.shopName)
+        return oldItem.shopId == newItem.shopId
     }
 
     override fun areContentsTheSame(oldItem: PresenterShop, newItem: PresenterShop): Boolean {

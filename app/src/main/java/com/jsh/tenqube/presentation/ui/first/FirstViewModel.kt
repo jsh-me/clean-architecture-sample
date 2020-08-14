@@ -21,10 +21,14 @@ class FirstViewModel  @ViewModelInject constructor(
     private val _shopAndLabelList = MutableLiveData<List<PresenterShop>>()
     val shopAndLabelList: LiveData<List<PresenterShop>> = _shopAndLabelList
 
+    private val _isUpdated = MutableLiveData<Boolean>()
+    val isUpdated: LiveData<Boolean> = _isUpdated
+
     var addButtonClicked: SingleLiveEvent<Void> = SingleLiveEvent()
     var openShopListClicked: SingleLiveEvent<ArrayList<String>> = SingleLiveEvent()
 
     init {
+        loadShops(true)
         initData()
     }
 
@@ -51,5 +55,9 @@ class FirstViewModel  @ViewModelInject constructor(
 
     fun addButtonClicked(){
         addButtonClicked.call()
+    }
+
+    fun loadShops(update: Boolean){
+        _isUpdated.value = update
     }
 }

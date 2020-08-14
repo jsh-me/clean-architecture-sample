@@ -7,6 +7,6 @@ sealed class PresenterShopEntity {
         val shopId: String,
         val shopName: String,
         val shopUrl: String,
-        val shopLabel: List<PresenterLabel> ?= null
+        val shopLabel: List<PresenterLabel>
     ): PresenterShopEntity()
 }

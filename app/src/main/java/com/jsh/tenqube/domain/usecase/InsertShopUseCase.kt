@@ -4,17 +4,16 @@ import com.jsh.tenqube.domain.entity.DomainLabel.*
 import com.jsh.tenqube.domain.entity.DomainShop.*
 import com.jsh.tenqube.domain.repository.LabelRepository
 import com.jsh.tenqube.domain.repository.ShopRepository
-import timber.log.Timber
+import com.jsh.tenqube.domain.util.Result
 
 class InsertShopUseCase (
     private val shopRepository: ShopRepository,
     private val labelRepository: LabelRepository
 ){
-    suspend operator fun invoke(shop: Shop) {
-        Timber.e("insert success")
-        shopRepository.insertShop(shop)
-        shop.labels?.map{
+    suspend operator fun invoke(shop: Shop): Result<Unit> {
+        shop.labels.map{
             labelRepository.insertLabel(Label(it.id, it.name))
         }
+        return shopRepository.insertShop(shop)
     }
 }

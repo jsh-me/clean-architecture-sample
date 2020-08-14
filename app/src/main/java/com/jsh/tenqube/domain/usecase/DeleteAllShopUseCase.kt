@@ -2,7 +2,6 @@ package com.jsh.tenqube.domain.usecase
 
 import com.jsh.tenqube.domain.repository.ShopRepository
 import com.jsh.tenqube.domain.util.Result
-import timber.log.Timber
 import java.lang.Exception
 
 class DeleteAllShopUseCase (

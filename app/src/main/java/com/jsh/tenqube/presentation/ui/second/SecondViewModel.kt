@@ -53,7 +53,8 @@ class SecondViewModel @ViewModelInject constructor(
                     PresenterShopEntity.PresenterShop(
                         shopId = _shopId.value!!,
                         shopName = shopName.value!!,
-                        shopUrl = shopUrl.value!!
+                        shopUrl = shopUrl.value!!,
+                        shopLabel = listOf(PresenterLabel("",shopLabels.value!!))
                     ).toDomainShop()
                 )
             }
