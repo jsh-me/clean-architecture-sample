@@ -1,7 +1,6 @@
 package com.jsh.tenqube.di
 
 import com.jsh.tenqube.domain.repository.LabelRepository
-import com.jsh.tenqube.domain.repository.ShopLabelRepository
 import com.jsh.tenqube.domain.repository.ShopRepository
 import com.jsh.tenqube.domain.usecase.*
 import dagger.Module
@@ -13,67 +12,33 @@ import dagger.hilt.android.scopes.ActivityRetainedScoped
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 class UseCaseModule {
-
     @Provides
     @ActivityRetainedScoped
-    fun getLabelsUseCase(repo: LabelRepository): GetLabelsUseCase {
-        return GetLabelsUseCase(repo)
-    }
-
-
-    @Provides
-    @ActivityRetainedScoped
-    fun getShopsUseCase(repo: ShopRepository): GetShopsUseCase {
-        return GetShopsUseCase(repo)
+    fun getShopsUseCase(shop: ShopRepository, label: LabelRepository): GetShopsUseCase {
+        return GetShopsUseCase(shop, label)
     }
 
     @Provides
     @ActivityRetainedScoped
-    fun deleteAllShopUseCase(shop: ShopRepository, shopLabel: ShopLabelRepository): DeleteAllShopUseCase {
-        return DeleteAllShopUseCase(shop, shopLabel)
+    fun deleteAllShopUseCase(shop: ShopRepository): DeleteAllShopUseCase {
+        return DeleteAllShopUseCase(shop)
+    }
+    
+    @Provides
+    @ActivityRetainedScoped
+    fun updateShopUseCase(repo: ShopRepository): UpdateShopUseCase {
+        return UpdateShopUseCase(repo)
     }
 
     @Provides
     @ActivityRetainedScoped
-    fun getShopWithLabelsUseCase(repo: ShopLabelRepository): GetShopWithLabelsUseCase {
-        return GetShopWithLabelsUseCase(repo)
+    fun deleteShopUseCase(repo: ShopRepository): DeleteShopUseCase {
+        return DeleteShopUseCase(repo)
     }
 
     @Provides
     @ActivityRetainedScoped
-    fun deleteAllLabelUseCase(repo: LabelRepository): DeleteAllLabelUseCase {
-        return DeleteAllLabelUseCase(repo)
+    fun insertShopUseCase(shop: ShopRepository, label: LabelRepository): InsertShopUseCase {
+        return InsertShopUseCase(shop, label)
     }
-
-    @Provides
-    @ActivityRetainedScoped
-    fun updateShopInfoUseCase(repo: ShopRepository): UpdateShopInfoUseCase {
-        return UpdateShopInfoUseCase(repo)
-    }
-
-    @Provides
-    @ActivityRetainedScoped
-    fun deleteShopInfoUseCase(repo: ShopRepository): DeleteShopInfoUseCase {
-        return DeleteShopInfoUseCase(repo)
-    }
-
-    @Provides
-    @ActivityRetainedScoped
-    fun insertShopInfoUseCase(shop: ShopRepository, shopLabel: ShopLabelRepository): InsertShopInfoUseCase {
-        return InsertShopInfoUseCase(shop, shopLabel)
-    }
-
-    @Provides
-    @ActivityRetainedScoped
-    fun insertLabelInfoUseCase(repo: LabelRepository): InsertLabelInfoUseCase {
-        return InsertLabelInfoUseCase(repo)
-    }
-
-    @Provides
-    @ActivityRetainedScoped
-    fun insertShopLabelUseCase(repo: ShopLabelRepository): InsertShopLabelUseCase {
-        return InsertShopLabelUseCase(repo)
-    }
-
-
 }

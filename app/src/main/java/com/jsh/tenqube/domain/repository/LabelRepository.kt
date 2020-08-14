@@ -6,11 +6,9 @@ import com.jsh.tenqube.domain.entity.DomainLabel.Label
 
 interface LabelRepository {
 
-    suspend fun getLabels(): Result<List<Label>>
+    suspend fun getLabels(isUpdated: Boolean): Result<List<Label>>
 
-    suspend fun fetchListFromRemoteOrLocal(id: String): Result<Label>
-
-    suspend fun saveLabel(label: Label)
+    suspend fun updateLabel(label: Label)
 
     suspend fun deleteAllLabel()
 

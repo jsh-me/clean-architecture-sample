@@ -17,7 +17,7 @@
         android:id="@+id/mainRecycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:items="@{viewmodel.shopAndLabelList}"
+        setItems="@{viewmodel.shopAndLabelList}"
         android:clipToPadding="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

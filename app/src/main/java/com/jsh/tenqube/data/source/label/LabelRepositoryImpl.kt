@@ -4,8 +4,11 @@ import com.jsh.tenqube.domain.repository.LabelRepository
 import com.jsh.tenqube.domain.util.Result
 import com.jsh.tenqube.domain.entity.DomainLabel.*
 import com.jsh.tenqube.domain.entity.DomainShop
+import com.jsh.tenqube.domain.util.Result.*
 import kotlinx.coroutines.*
 import timber.log.Timber
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentMap
 import javax.inject.Inject
 
 class LabelRepositoryImpl @Inject constructor(
@@ -14,40 +17,46 @@ class LabelRepositoryImpl @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ): LabelRepository {
 
-    override suspend fun getLabels(): Result<List<Label>> = withContext(ioDispatcher) {
-        if(localDataSource.isLabelDBEmpty()){ //room db 갯수 여부, 비어있으면 remote 로 불러오기
-            Timber.e("remoteDataSource label available")
-           remoteDataSource.getLabels().let{ result ->
-               if(result is Result.Success){
-                   cacheLabel(result.data) //remote data를 room에 insert 하기!
+    private var cachedLabels: ConcurrentMap<String, Label> ?= null
 
-                   return@withContext Result.Success(result.data)
-               } else Result.Error(Exception("Remote Illegal state"))
-           }
-        } else {
-            Timber.e("localDataSource label available")
-            localDataSource.getLabels().let{ result ->
-                if(result is Result.Success){
-                    return@withContext Result.Success(result.data)
-                } else Result.Error(Exception("Local Illegal state"))
+    override suspend fun getLabels(isUpdated: Boolean): Result<List<Label>> {
+        return withContext(ioDispatcher) {
+            if(isUpdated) {
+                cachedLabels?.let { cachedLabels ->
+                    return@withContext Success(cachedLabels.values.sortedBy { it.id })
+                }
             }
+
+            val newLabels = fetchLabels(isUpdated)
+            (newLabels as? Success)?.let { refreshCache(it.data) }
+
+            cachedLabels?.values?.let{labels ->
+                return@withContext Success(labels.sortedBy { it.id })
+            }
+
+            (newLabels as? Success)?.let{
+                if(it.data.isEmpty()){
+                    return@withContext Success(it.data)
+                }
+            }
+            return@withContext Error(Exception("Illegal State"))
         }
     }
 
-    override suspend fun fetchListFromRemoteOrLocal(id: String): Result<Label> {
+    private suspend fun fetchLabels(id: String): Result<Label> {
         val remoteLabelData = remoteDataSource.getLabel(id)
 
         when(remoteLabelData){
-            is Result.Error -> Timber.w("Remote data source fetch failed")
-            is Result.Success ->{
+            is Error -> Timber.w("Remote data source fetch failed")
+            is Success ->{
                 refreshLocalDataSource(remoteLabelData.data)
                 return remoteLabelData
             }
             else ->  throw IllegalStateException()
         }
         val localLabelData = localDataSource.getLabel(id)
-        if( localLabelData is Result.Success) return localLabelData
-        return Result.Error(Exception("Error fetching from remote and local"))
+        if( localLabelData is Success) return localLabelData
+        return Error(Exception("Error fetching from remote and local"))
     }
 
     override suspend fun insertLabel(label: Label) {
@@ -55,18 +64,31 @@ class LabelRepositoryImpl @Inject constructor(
             launch { localDataSource.insertLabel(label) }
             launch { remoteDataSource.insertLabel(label) }
         }
-
+        cachedLabels?.put(label.id, label)
     }
 
-    private suspend fun fetchListFromRemoteOrLocal(){
+    private suspend fun fetchLabels(isUpdated: Boolean): Result<List<Label>> {
         val remoteLabelData = remoteDataSource.getLabels()
 
-        if (remoteLabelData is Result.Success) {
-            refreshLocalDataSource(remoteLabelData.data)
+        when ( remoteLabelData ) {
+            is Error -> Timber.w("Remote data source fetch failed")
+            is Success -> {
+                refreshLocalDataSource(remoteLabelData.data)
+                return remoteLabelData
+            }
+            else -> throw IllegalStateException()
         }
+
+        if (isUpdated) {
+            return Error(Exception("Can't force refresh: remote data source is unavailable"))
+        }
+
+        val localLabelData = localDataSource.getLabels()
+        if( localLabelData is Success) return localLabelData
+        return Error(Exception("Error fetching from remote and local"))
     }
 
-    override suspend fun saveLabel(label: Label) {
+    override suspend fun updateLabel(label: Label) {
         coroutineScope {
             launch { localDataSource.updateLabel(label) }
             launch { remoteDataSource.updateLabel(label) }
@@ -79,22 +101,38 @@ class LabelRepositoryImpl @Inject constructor(
             launch { localDataSource.deleteAllLabel() }
             launch { remoteDataSource.deleteAllLabel() }
         }
+        cachedLabels?.clear()
     }
 
     private suspend fun refreshLocalDataSource(labelList: List<Label>) {
+        localDataSource.deleteAllLabel()
         for (label in labelList) {
-            localDataSource.updateLabel(label)
+            localDataSource.insertLabel(label)
         }
     }
 
     private suspend fun refreshLocalDataSource(label: Label) {
-        localDataSource.updateLabel(label)
+        localDataSource.insertLabel(label)
     }
 
-
-    private suspend fun cacheLabel(list: List<Label>) = withContext(ioDispatcher) {
-        list.map{
-            localDataSource.insertLabel(it)
+    private fun refreshCache(labels: List<Label>){
+        cachedLabels?.clear()
+        labels.sortedBy { it.id }.forEach {
+            cacheAndPerform(it) {}
         }
+    }
+
+    private fun cacheLabel(label: Label): Label{
+        val cachedLabel = Label(label.id, label.name)
+        if(cachedLabels == null){
+            cachedLabels = ConcurrentHashMap()
+        }
+        cachedLabels?.put(cachedLabel.id, cachedLabel)
+        return cachedLabel
+    }
+
+    private inline fun cacheAndPerform(label: Label, perform: (Label) -> Unit) {
+        val cacheLabel = cacheLabel(label)
+        perform(cacheLabel)
     }
 }

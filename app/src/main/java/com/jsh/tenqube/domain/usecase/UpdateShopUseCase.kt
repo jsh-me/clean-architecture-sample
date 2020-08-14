@@ -4,7 +4,7 @@ import com.jsh.tenqube.domain.entity.DomainShop.Shop
 import com.jsh.tenqube.domain.repository.ShopRepository
 import timber.log.Timber
 
-class UpdateShopInfoUseCase (
+class UpdateShopUseCase (
     private val defaultRepository: ShopRepository
 ) {
     suspend operator fun invoke(shop: Shop){

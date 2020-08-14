@@ -45,10 +45,6 @@ class RemoteLabelDataSource @Inject constructor(
         tenqubeServiceData?.put(label.id, label)
     }
 
-    override suspend fun isLabelDBEmpty(): Boolean = withContext(ioDispatcher){
-        return@withContext tenqubeServiceData?.size == 0
-    }
-
     override suspend fun deleteAllLabel() {
         tenqubeServiceData?.clear()
     }

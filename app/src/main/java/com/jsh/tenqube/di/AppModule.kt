@@ -8,16 +8,14 @@ import com.jsh.tenqube.data.source.shop.local.LocalShopDataSource
 import com.jsh.tenqube.data.db.TenqubeDatabase
 import com.jsh.tenqube.data.source.label.LabelDataSource
 import com.jsh.tenqube.data.source.label.LabelRepositoryImpl
+import com.jsh.tenqube.data.source.label.local.LabelDao
 import com.jsh.tenqube.data.source.label.local.LocalLabelDataSource
 import com.jsh.tenqube.data.source.label.remote.RemoteLabelDataSource
 import com.jsh.tenqube.data.source.shop.ShopDataSource
 import com.jsh.tenqube.data.source.shop.ShopRepositoryImpl
+import com.jsh.tenqube.data.source.shop.local.ShopDao
 import com.jsh.tenqube.data.source.shop.remote.RemoteShopDataSource
-import com.jsh.tenqube.data.source.shopAndLabel.ShopLabelDataSource
-import com.jsh.tenqube.data.source.shopAndLabel.ShopLabelRepositoryImpl
-import com.jsh.tenqube.data.source.shopAndLabel.local.LocalShopLabelDataSource
 import com.jsh.tenqube.domain.repository.LabelRepository
-import com.jsh.tenqube.domain.repository.ShopLabelRepository
 import com.jsh.tenqube.domain.repository.ShopRepository
 import dagger.Module
 import dagger.Provides
@@ -80,22 +78,11 @@ object AppModule {
     @Provides
     @localLabel
     fun provideLocalLabelDataSource(
-        database: TenqubeDatabase,
+        labelDao: LabelDao,
         ioDispatcher: CoroutineDispatcher
         ): LabelDataSource {
         return LocalLabelDataSource(
-            database, ioDispatcher
-        )
-    }
-
-    @Singleton
-    @Provides
-    fun provideShopLabelDataSource(
-        database: TenqubeDatabase,
-        ioDispatcher: CoroutineDispatcher
-    ): ShopLabelDataSource {
-        return LocalShopLabelDataSource(
-            database, ioDispatcher
+            labelDao, ioDispatcher
         )
     }
 
@@ -113,13 +100,21 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun provideShopDao(db: TenqubeDatabase): ShopDao = db.shopDao()
+
+    @Singleton
+    @Provides
+    fun provideLabelDao(db: TenqubeDatabase): LabelDao = db.labelDao()
+
+    @Singleton
+    @Provides
     @localShop
     fun provideLocalShopDataSource(
-        database: TenqubeDatabase,
+        shopDao: ShopDao,
         ioDispatcher: CoroutineDispatcher
     ): ShopDataSource {
         return LocalShopDataSource(
-            database, ioDispatcher
+            shopDao, ioDispatcher
         )
     }
 
@@ -155,15 +150,5 @@ object RepositoryModule{
         ioDispatcher: CoroutineDispatcher
     ): LabelRepository {
         return LabelRepositoryImpl(remoteDataSource, localDataSource, ioDispatcher)
-    }
-
-    @Singleton
-    @Provides
-    fun provideShopLabelRepository(
-        shopLabelDataSource: ShopLabelDataSource
-    ): ShopLabelRepository {
-        return ShopLabelRepositoryImpl(
-            shopLabelDataSource
-        )
     }
 }

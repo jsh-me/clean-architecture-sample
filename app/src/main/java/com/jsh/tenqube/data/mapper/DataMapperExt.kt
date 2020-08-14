@@ -4,12 +4,11 @@ import com.jsh.tenqube.data.dto.LabelModel
 import com.jsh.tenqube.data.dto.ShopModel
 import com.jsh.tenqube.data.source.label.local.DataLabel.*
 import com.jsh.tenqube.data.source.shop.local.DataShop
-import com.jsh.tenqube.data.source.shopAndLabel.ShopWithAllLabel
-import com.jsh.tenqube.data.source.shopAndLabel.local.DataShopLocal.LocalShopLabelModel
+import com.jsh.tenqube.data.source.shop.local.DataShopLabel
+import com.jsh.tenqube.data.source.shop.local.DataShopLabel.LocalShopLabelModel
+import com.jsh.tenqube.data.source.shop.local.ShopWithAllLabel
 import com.jsh.tenqube.domain.entity.DomainLabel.*
 import com.jsh.tenqube.domain.entity.DomainShop.*
-import com.jsh.tenqube.domain.entity.DomainShopLabel.*
-
 
 fun List<LabelModel>.toDomainLabelList(): List<Label>{
     return this.map{
@@ -17,9 +16,10 @@ fun List<LabelModel>.toDomainLabelList(): List<Label>{
     }
 }
 
+//우선 label id 만 넣는당.
 fun List<ShopModel>.toDomainShopList(): List<Shop>{
     return this.map{
-        Shop(it.id, it.name, it.imgUrl, it.labelIds)
+        Shop(it.id, it.name, it.imgUrl, it.labelIds.map { id -> Label(id, "") })
     }
 }
 
@@ -58,30 +58,30 @@ fun Shop.toLocalDataShopModel(): DataShop.LocalShopModel {
     return DataShop.LocalShopModel(id = this.id, shopName = this.name, shopUrl = this.imgUrl)
 }
 
-
-fun ShopLabel.toDataShopWithAllLabel(): ShopWithAllLabel {
-    return ShopWithAllLabel(
-        this.shop.toLocalDataShopModel(),
-        this.labels.toDataLocalLabelList()
-    )
-}
-
-fun ShopLabel.toDataLocalShopLabelModel(): List<LocalShopLabelModel> {
-    return this.labels.map{
-        LocalShopLabelModel(this.shop.id, it.name)
-    }
-}
-
-fun ShopWithAllLabel.toDomainShopLabel(): ShopLabel {
-    return ShopLabel(this.shop.toLocalDomainShop(), this.shopLabels.toLocalDomainLabelList())
-}
-
-fun List<ShopWithAllLabel>.toDomainShopLabelList(): List<ShopLabel> {
-    return this.map{
-        ShopLabel(it.shop.toLocalDomainShop(), it.shopLabels.toLocalDomainLabelList())
-    }
-}
-
-fun SingleShopLabel.toDataShopLabel(): LocalShopLabelModel{
-    return LocalShopLabelModel(this.shopId, this.labelId)
-}
+//
+//fun ShopLabel.toDataShopWithAllLabel(): ShopWithAllLabel {
+//    return ShopWithAllLabel(
+//        this.shop.toLocalDataShopModel(),
+//        this.labels.toDataLocalLabelList()
+//    )
+//}
+//
+//fun ShopLabel.toDataLocalShopLabelModel(): List<LocalShopLabelModel> {
+//    return this.labels.map{
+//        LocalShopLabelModel(this.shop.id, it.name)
+//    }
+//}
+//
+//fun ShopWithAllLabel.toDomainShopLabel(): ShopLabel {
+//    return ShopLabel(this.shop.toLocalDomainShop(), this.shopLabels.toLocalDomainLabelList())
+//}
+//
+//fun List<ShopWithAllLabel>.toDomainShopLabelList(): List<ShopLabel> {
+//    return this.map{
+//        ShopLabel(it.shop.toLocalDomainShop(), it.shopLabels.toLocalDomainLabelList())
+//    }
+//}
+//
+//fun SingleShopLabel.toDataShopLabel(): LocalShopLabelModel{
+//    return LocalShopLabelModel(this.shopId, this.labelId)
+//}

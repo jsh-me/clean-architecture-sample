@@ -2,6 +2,7 @@ package com.jsh.tenqube.data.source.shop.local
 
 import androidx.room.*
 import com.jsh.tenqube.data.source.shop.local.DataShop.*
+import com.jsh.tenqube.data.source.shop.local.DataShopLabel.LocalShopLabelModel
 
 @Dao
 interface ShopDao{
@@ -26,5 +27,18 @@ interface ShopDao{
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateShop(shop: LocalShopModel)
+
+    @Transaction
+    @Query("SELECT * FROM shop")
+    fun getShopWithAllLabel(): List<ShopWithAllLabel>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertShopWithLabel(shopLabel: LocalShopLabelModel)
+
+    @Query("DELETE FROM shopLabel")
+    fun deleteAllShopLabel()
+
+    @Insert
+    fun updateShopLabels(shopLabel: LocalShopLabelModel)
 
 }

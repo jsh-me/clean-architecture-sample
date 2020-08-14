@@ -1,9 +1,9 @@
-package com.jsh.tenqube.data.source.shopAndLabel
+package com.jsh.tenqube.data.source.shop.local
 
 import androidx.room.*
 import com.jsh.tenqube.data.source.label.local.DataLabel.*
 import com.jsh.tenqube.data.source.shop.local.DataShop.*
-import com.jsh.tenqube.data.source.shopAndLabel.local.DataShopLocal.*
+import com.jsh.tenqube.data.source.shop.local.DataShopLabel.LocalShopLabelModel
 
 
 data class ShopWithAllLabel(

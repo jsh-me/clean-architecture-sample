@@ -9,7 +9,6 @@ import androidx.lifecycle.Observer
 import com.jsh.tenqube.R
 import com.jsh.tenqube.databinding.ActivitySubBinding
 import com.jsh.tenqube.presentation.ui.first.FirstActivity
-import com.jsh.tenqube.presentation.util.toLoadUrl
 import com.jsh.tenqube.presentation.util.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 

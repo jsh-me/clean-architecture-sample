@@ -6,13 +6,14 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.jsh.tenqube.databinding.ItemShopListBinding
-import com.jsh.tenqube.presentation.entity.PresenterShopLabel.*
+import com.jsh.tenqube.presentation.entity.PresenterLabelEntity.*
+import com.jsh.tenqube.presentation.entity.PresenterShopEntity.*
 import com.jsh.tenqube.presentation.ui.first.MainAdapter.*
 import timber.log.Timber
 
 
 class MainAdapter(private val viewModel: FirstViewModel):
-    ListAdapter<PresenterShopLabelList, FirstViewHolder>(ShopDiffCallback()) {
+    ListAdapter<PresenterShop, FirstViewHolder>(ShopDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FirstViewHolder {
         return FirstViewHolder.from(parent)
@@ -31,17 +32,17 @@ class MainAdapter(private val viewModel: FirstViewModel):
     class FirstViewHolder private constructor(val binding: ItemShopListBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(viewModel: FirstViewModel, item: PresenterShopLabelList) {
+        fun bind(viewModel: FirstViewModel, item: PresenterShop ) {
 
             var labelNameList = ""
 
-            item.shopLabels.map {
+            item.shopLabel?.map{
                 labelNameList += "#${it.name} "
             }
 
             binding.shopImage.clipToOutline = true
             binding.viewModel = viewModel
-            binding.shop = item.shop
+            binding.shop = item
             binding.label = labelNameList
         }
 
@@ -62,12 +63,12 @@ class MainAdapter(private val viewModel: FirstViewModel):
  * Used by ListAdapter to calculate the minimum number of changes between and old list and a new
  * list that's been passed to `submitList`.
  */
-class ShopDiffCallback : DiffUtil.ItemCallback<PresenterShopLabelList>() {
-    override fun areItemsTheSame(oldItem: PresenterShopLabelList, newItem: PresenterShopLabelList): Boolean {
-        return (oldItem.shop.shopId == newItem.shop.shopId) && (oldItem.shop.shopName == newItem.shop.shopName) && (oldItem.shop.shopUrl == oldItem.shop.shopUrl)
+class ShopDiffCallback : DiffUtil.ItemCallback<PresenterShop>() {
+    override fun areItemsTheSame(oldItem: PresenterShop, newItem: PresenterShop): Boolean {
+        return (oldItem.shopId == newItem.shopId) && (oldItem.shopName == newItem.shopName)
     }
 
-    override fun areContentsTheSame(oldItem: PresenterShopLabelList, newItem: PresenterShopLabelList): Boolean {
+    override fun areContentsTheSame(oldItem: PresenterShop, newItem: PresenterShop): Boolean {
         return oldItem == newItem
     }
 }

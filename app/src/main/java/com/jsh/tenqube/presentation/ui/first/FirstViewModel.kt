@@ -1,52 +1,48 @@
 package com.jsh.tenqube.presentation.ui.first
 
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jsh.tenqube.domain.usecase.*
+import com.jsh.tenqube.domain.util.Result
 import com.jsh.tenqube.presentation.SingleLiveEvent
-import com.jsh.tenqube.presentation.entity.PresenterShopLabel.PresenterShopLabelList
-import com.jsh.tenqube.presentation.mapper.toPresenterShopLabelList
+import com.jsh.tenqube.presentation.entity.PresenterLabelEntity.*
+import com.jsh.tenqube.presentation.entity.PresenterShopEntity.*
+import com.jsh.tenqube.presentation.mapper.toPresenterShopList
 import kotlinx.coroutines.*
 
 class FirstViewModel  @ViewModelInject constructor(
     private val getShopsUseCase: GetShopsUseCase,
-    private val getLabelsUseCase: GetLabelsUseCase,
-    private val deleteAllShopUseCase: DeleteAllShopUseCase,
-    private val deleteAllLabelUseCase: DeleteAllLabelUseCase,
-    private val getShopWithLabelsUseCase: GetShopWithLabelsUseCase
+    private val deleteAllShopUseCase: DeleteAllShopUseCase
 ): ViewModel() {
 
-    val shopAndLabelList = MutableLiveData<List<PresenterShopLabelList>>().apply{ value = emptyList()}
+    private val _shopAndLabelList = MutableLiveData<List<PresenterShop>>()
+    val shopAndLabelList: LiveData<List<PresenterShop>> = _shopAndLabelList
+
     val addButtonClicked: SingleLiveEvent<Void> = SingleLiveEvent()
     val openShopListClicked: SingleLiveEvent<ArrayList<String>> = SingleLiveEvent()
-
 
     init {
         initData()
     }
 
     private fun initData() = viewModelScope.launch {
-        val deferred = async {
-            getLabelsUseCase()
-        }
-        deferred.await()
-        getShopsUseCase()
-
-        viewModelScope.launch {
-            shopAndLabelList.value = getShopWithLabelsUseCase().toPresenterShopLabelList()
+        getShopsUseCase().let{
+            if( it is Result.Success){
+                _shopAndLabelList.value = it.data.toPresenterShopList()
+            }
         }
     }
 
-    fun allLoad(){
+    fun allLoadButtonClick(){
         initData()
     }
 
-    fun allDelete() = viewModelScope.launch {
-        shopAndLabelList.value = emptyList()
+    fun allDeleteButtonClick() = viewModelScope.launch {
+        _shopAndLabelList.value = emptyList()
         deleteAllShopUseCase()
-        deleteAllLabelUseCase()
     }
 
     fun openShopDetails(id: String, url: String, name: String, label: String){

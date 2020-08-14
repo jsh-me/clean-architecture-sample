@@ -39,11 +39,6 @@ class FirstActivity : AppCompatActivity() {
     }
 
     private fun observeData(){
-        viewModel.shopAndLabelList.observe(this, Observer {
-            binding.mainRecycler.adapter?.notifyDataSetChanged()
-            Timber.e("activity invoke")
-        })
-
         viewModel.openShopListClicked.observe(this, Observer {
             openShopDetails(it)
         })
@@ -86,11 +81,11 @@ class FirstActivity : AppCompatActivity() {
     }
 
     private fun allLoad(): Boolean{
-        viewModel.allLoad()
+        viewModel.allLoadButtonClick()
         return true
     }
     private fun allDelete(): Boolean{
-        viewModel.allDelete()
+        viewModel.allDeleteButtonClick()
         binding.mainRecycler.adapter?.notifyDataSetChanged()
         return true
     }
