@@ -9,8 +9,8 @@ import com.jsh.tenqube.presentation.util.toLoadUrl
 import timber.log.Timber
 
 @BindingAdapter("setItems")
-fun bindShopRecyclerView(recyclerView: RecyclerView, shopAndLabel: List<PresenterShop>?){
-    shopAndLabel?.let{
+fun bindShopRecyclerView(recyclerView: RecyclerView, shopAndLabel: List<PresenterShop>?) {
+    shopAndLabel?.let {
         (recyclerView.adapter as MainAdapter).submitList(it)
         Timber.e("first binding end! size: ${it.size}")
         recyclerView.adapter?.notifyDataSetChanged()
@@ -18,7 +18,7 @@ fun bindShopRecyclerView(recyclerView: RecyclerView, shopAndLabel: List<Presente
 }
 
 @BindingAdapter("bindImage")
-fun bindImageView(imageView: ImageView, src: String?){
+fun bindImageView(imageView: ImageView, src: String?) {
     src?.let {
         imageView.toLoadUrl(it)
     }

@@ -1,14 +1,12 @@
 package com.jsh.tenqube.data.source.shop.remote
 
 import com.jsh.tenqube.data.api.TenqubeService
-import com.jsh.tenqube.data.source.label.local.LocalLabelDataSource
 import com.jsh.tenqube.data.source.shop.ShopDataSource
-import com.jsh.tenqube.domain.entity.DomainLabel.*
+import com.jsh.tenqube.domain.entity.Label
+import com.jsh.tenqube.domain.entity.Shop
 import com.jsh.tenqube.domain.util.Result
-import com.jsh.tenqube.domain.entity.DomainShop.Shop
 import com.jsh.tenqube.domain.repository.LabelRepository
 import kotlinx.coroutines.*
-import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -20,24 +18,25 @@ class RemoteShopDataSource @Inject constructor(
     private var isUpdated: Boolean = true
 
     override suspend fun getShops(): Result<List<Shop>> = withContext(ioDispatcher) {
-        return@withContext try{
-            Timber.e("1. isUPdated: ${isUpdated}" )
+        return@withContext try {
             val labelList = mutableMapOf<String, String>()
 
-            labelRepository.getLabels(isUpdated).let{
-                if( it is Result.Success){
-                    it.data.map{
-                        labelList.put(it.id, it.name)
+            labelRepository.getLabels(isUpdated).let {
+                if (it is Result.Success) {
+                    it.data.map { label ->
+                        labelList.put(label.id, label.name)
                     }
                 }
             }
-            Timber.e("2. isUPdated: ${isUpdated}" )
-
-            Result.Success((tenqubeService.getShops().results.map{
-                Shop(id = it.id, name = it.name, imgUrl = it.imgUrl, labels = it.labelIds.map { labelId ->
-                    Label( id = labelId, name = labelList[labelId]!!) }) //List<Label>
-                 }))
-
+            Result.Success((tenqubeService.getShops().results.map {
+                Shop(
+                    id = it.id,
+                    name = it.name,
+                    imgUrl = it.imgUrl,
+                    labels = it.labelIds.map { labelId ->
+                        Label(id = labelId, name = labelList[labelId]!!)
+                    }) //List<Label>
+            }))
         } catch (e: Exception) {
             Result.Error(e)
         }

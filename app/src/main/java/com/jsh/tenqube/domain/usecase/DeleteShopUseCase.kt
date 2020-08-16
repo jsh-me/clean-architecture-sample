@@ -7,6 +7,6 @@ class DeleteShopUseCase(
     private val defaultRepository: ShopRepository
 ) {
     suspend operator fun invoke(id: String): Result<Unit> {
-       return defaultRepository.deleteShop(id)
+        return defaultRepository.deleteShop(id)
     }
 }

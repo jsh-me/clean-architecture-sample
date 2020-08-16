@@ -1,7 +1,7 @@
 package com.jsh.tenqube.domain.repository
 
+import com.jsh.tenqube.domain.entity.Shop
 import com.jsh.tenqube.domain.util.Result
-import com.jsh.tenqube.domain.entity.DomainShop.*
 
 interface ShopRepository {
 

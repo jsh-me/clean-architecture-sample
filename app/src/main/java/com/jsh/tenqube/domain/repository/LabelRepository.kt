@@ -1,8 +1,7 @@
 package com.jsh.tenqube.domain.repository
 
 import com.jsh.tenqube.domain.util.Result
-import com.jsh.tenqube.domain.entity.DomainLabel.Label
-
+import com.jsh.tenqube.domain.entity.Label
 
 interface LabelRepository {
 
@@ -15,4 +14,5 @@ interface LabelRepository {
     suspend fun deleteAllLabel()
 
     suspend fun insertLabel(label: Label)
+
 }

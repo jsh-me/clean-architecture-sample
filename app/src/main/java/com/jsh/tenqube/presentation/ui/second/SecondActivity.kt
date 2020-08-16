@@ -24,11 +24,15 @@ class SecondActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        binding.subViewModel = viewModel
-        binding.lifecycleOwner = this
 
+        setupBinding()
         initView()
         observeData()
+    }
+
+    private fun setupBinding() {
+        binding.subViewModel = viewModel
+        binding.lifecycleOwner = this
     }
 
     private fun initView() {
@@ -40,7 +44,7 @@ class SecondActivity : AppCompatActivity() {
     }
 
     private fun observeData() {
-        viewModel.deleteButtonClicked.observe(this, Observer {
+        viewModel.deleteShop.observe(this, Observer {
             if(it == true) {
                 Toast.makeText(this, "Delete Complete", Toast.LENGTH_SHORT).show()
                 backToMain()
@@ -49,7 +53,7 @@ class SecondActivity : AppCompatActivity() {
             }
         })
 
-        viewModel.editButtonClicked.observe(this, Observer {
+        viewModel.editShop.observe(this, Observer {
             if(it == true){
                 Toast.makeText(this, "Edit Complete", Toast.LENGTH_SHORT).show()
                 backToMain()
@@ -58,7 +62,7 @@ class SecondActivity : AppCompatActivity() {
             }
         })
 
-        viewModel.addButtonClicked.observe(this, Observer {
+        viewModel.addShop.observe(this, Observer {
             if(it == true) {
                 Toast.makeText(this, "Add Complete", Toast.LENGTH_SHORT).show()
                 backToMain()
@@ -67,12 +71,12 @@ class SecondActivity : AppCompatActivity() {
             }
         })
 
-        viewModel.addImageButtonClicked.observe(this, Observer {
+        viewModel.addShopImage.observe(this, Observer {
             viewModel.setImageUrl(resources.getString(R.string.testImage))
         })
     }
 
-    private fun backToMain(){
+    private fun backToMain() {
         val intent = Intent(this, FirstActivity::class.java)
         startActivity(intent)
         finish()

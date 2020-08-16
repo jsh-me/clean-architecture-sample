@@ -11,10 +11,13 @@ fun List<PresenterLabel>.toStringLabel(): String {
     return stringLabel
 }
 
-fun String.toListLabel(): List<PresenterLabel> {
-    val stringLabel = this.split("\n")
-
-    return stringLabel.map{
-        PresenterLabel(UUID.randomUUID().toString(), it)
-    }
+fun String?.toListLabel(): List<PresenterLabel> {
+   this?.let {
+       val stringLabel = this.split("\n")
+       return stringLabel.map {
+           PresenterLabel(UUID.randomUUID().toString(), it)
+       }
+   }?: run{
+       return emptyList()
+   }
 }

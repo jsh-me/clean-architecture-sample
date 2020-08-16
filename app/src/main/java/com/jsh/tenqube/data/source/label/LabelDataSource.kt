@@ -1,8 +1,7 @@
 package com.jsh.tenqube.data.source.label
 
+import com.jsh.tenqube.domain.entity.Label
 import com.jsh.tenqube.domain.util.Result
-import com.jsh.tenqube.domain.entity.DomainLabel.*
-import com.jsh.tenqube.domain.entity.DomainShop
 
 interface LabelDataSource {
 

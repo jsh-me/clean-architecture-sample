@@ -1,11 +1,7 @@
 package com.jsh.tenqube.data.source.shop
 
-import com.jsh.tenqube.data.source.shop.local.ShopWithAllLabel
-import com.jsh.tenqube.domain.entity.DomainLabel
-import com.jsh.tenqube.domain.entity.DomainLabel.*
 import com.jsh.tenqube.domain.util.Result
-import com.jsh.tenqube.domain.entity.DomainShop
-import com.jsh.tenqube.domain.entity.DomainShop.Shop
+import com.jsh.tenqube.domain.entity.Shop
 import com.jsh.tenqube.domain.repository.ShopRepository
 import com.jsh.tenqube.domain.util.Result.*
 import kotlinx.coroutines.*
@@ -33,7 +29,7 @@ class ShopRepositoryImpl @Inject constructor(
             val newShops = fetchShops(isUpdated) //캐시가 없으면 여기까지 내려오니까, fetchshops에서는 로컬 먼저 불러오고, 로컬에도 없으면 리모트로.
             (newShops as? Success)?.let { refreshCache(it.data) } //newshop의 결과값을 다시 캐시로 넣음
 
-            cachedShops?.values?.let{ shops ->  //그럼 캐시가 생길테니 리턴함
+            cachedShops?.values?.let { shops ->  //그럼 캐시가 생길테니 리턴함
                 return@withContext Success(shops.sortedBy { it.id })
             }
             return@withContext Error(Exception("Illegal State"))
@@ -43,12 +39,12 @@ class ShopRepositoryImpl @Inject constructor(
     override suspend fun getShop(id: String, isUpdated: Boolean): Result<Shop> {
         return withContext(ioDispatcher){
             if(!isUpdated) {
-               getShopById(id)?.let{
+               getShopById(id)?.let {
                    return@withContext Success(it)
                }
             }
             val newShop = fetchShop(id, isUpdated)
-            (newShop as? Success)?.let{
+            (newShop as? Success)?.let {
                 cacheShop(it.data)
                 return@withContext Success(getShopById(id)!!)
             }
@@ -58,13 +54,13 @@ class ShopRepositoryImpl @Inject constructor(
 
     private suspend fun fetchShop(id: String, isUpdated: Boolean): Result<Shop> {
         val localShopData = localDataSource.getShop(id)
-        if( localShopData is Success) return localShopData
+        if(localShopData is Success) return localShopData
 
         val remoteShopData = remoteDataSource.getShop(id)
 
-        when( remoteShopData ){
+        when(remoteShopData){
             is Error -> Timber.w("Remote data source fetch failed")
-            is Success ->{
+            is Success -> {
                 refreshLocalDataSource(remoteShopData.data)
                 return remoteShopData
             }
@@ -105,12 +101,11 @@ class ShopRepositoryImpl @Inject constructor(
                 }
                 cachedShops?.put(shop.id, shop)
                 Success(Unit)
-            }catch (e: Exception) {
+            } catch (e: Exception) {
                 Error(e)
             }
         }
-      }
-
+    }
 
     override suspend fun deleteShop(id: String): Result<Unit> = withContext(ioDispatcher) {
         return@withContext coroutineScope {
@@ -145,7 +140,7 @@ class ShopRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun fetchShops(isUpdated: Boolean): Result<List<Shop>>  = withContext(ioDispatcher) {
+    private suspend fun fetchShops(isUpdated: Boolean): Result<List<Shop>> = withContext(ioDispatcher) {
         val localShopData = localDataSource.getShops()
 
         (localShopData as? Success)?.let {

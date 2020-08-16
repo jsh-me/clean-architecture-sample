@@ -12,7 +12,7 @@ import com.jsh.tenqube.presentation.entity.PresenterShop
 import com.jsh.tenqube.presentation.mapper.toPresenterShopList
 import kotlinx.coroutines.*
 
-class FirstViewModel  @ViewModelInject constructor(
+class FirstViewModel  @ViewModelInject constructor (
     private val getShopsUseCase: GetShopsUseCase,
     private val deleteAllShopUseCase: DeleteAllShopUseCase
 ): ViewModel() {
@@ -20,9 +20,13 @@ class FirstViewModel  @ViewModelInject constructor(
     private val _shopAndLabelList = MutableLiveData<List<PresenterShop>>()
     val shopAndLabelList: LiveData<List<PresenterShop>> = _shopAndLabelList
 
-    var addButtonClicked: SingleLiveEvent<Void> = SingleLiveEvent()
-    var openShopListClicked: SingleLiveEvent<PresenterShop> = SingleLiveEvent()
-    var updated: Boolean = true
+    private val _addShop = SingleLiveEvent<Void>()
+    val addShop: SingleLiveEvent<Void> = _addShop
+
+    private val _openShopDetail = SingleLiveEvent<PresenterShop>()
+    var openShopDetail: SingleLiveEvent<PresenterShop> = _openShopDetail
+
+    private var updated: Boolean = true
 
     init {
         initData(updated)
@@ -37,7 +41,7 @@ class FirstViewModel  @ViewModelInject constructor(
         updated = false
     }
 
-    fun reLoadButtonClick(){
+    fun reLoadButtonClick() {
         updated = true
         initData(updated)
     }
@@ -48,11 +52,11 @@ class FirstViewModel  @ViewModelInject constructor(
         }
     }
 
-    fun openShopDetails(shop: PresenterShop){
-        openShopListClicked.value = shop
+    fun openShopDetails(shop: PresenterShop) {
+        _openShopDetail.value = shop
     }
 
-    fun addButtonClicked(){
-        addButtonClicked.call()
+    fun addButtonClicked() {
+        _addShop.call()
     }
 }

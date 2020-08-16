@@ -1,7 +1,7 @@
 package com.jsh.tenqube.presentation.mapper
 
-import com.jsh.tenqube.domain.entity.DomainLabel.*
-import com.jsh.tenqube.domain.entity.DomainShop.*
+import com.jsh.tenqube.domain.entity.Label
+import com.jsh.tenqube.domain.entity.Shop
 import com.jsh.tenqube.presentation.entity.PresenterLabel
 import com.jsh.tenqube.presentation.entity.PresenterShop
 

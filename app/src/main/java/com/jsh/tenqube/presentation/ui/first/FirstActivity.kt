@@ -40,31 +40,31 @@ class FirstActivity : AppCompatActivity() {
     }
 
     private fun observeData(){
-        viewModel.openShopListClicked.observe(this, Observer {
+        viewModel.openShopDetail.observe(this, Observer {
             openShopDetails(it)
         })
 
-        viewModel.addButtonClicked.observe(this, Observer {
+        viewModel.addShop.observe(this, Observer {
             val intent = Intent(this@FirstActivity, SecondActivity::class.java)
             intent.putExtra(EXTRA_USER_STATE, false)
             startActivity(intent)
         })
     }
 
-    private fun openShopDetails(shopInfo: PresenterShop){
+    private fun openShopDetails(shopInfo: PresenterShop) {
         val intent = Intent(this@FirstActivity, SecondActivity::class.java)
         intent.putExtra(EXTRA_USER_STATE, true)
         intent.putExtra(EXTRA_SHOP_DETAIL, shopInfo as Serializable)
         startActivity(intent)
     }
 
-    private fun setupListAdapter(){
+    private fun setupListAdapter() {
         val viewModel = binding.viewmodel
-        if(viewModel != null){
+        viewModel?.let{
             listAdapter = MainAdapter(viewModel)
             binding.mainRecycler.layoutManager = LinearLayoutManager(this)
             binding.mainRecycler.adapter = listAdapter
-        } else {
+        }?: run {
             Timber.e("ViewModel not initialized when attempting to set up adapter.")
         }
     }
@@ -76,18 +76,18 @@ class FirstActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.allLoad -> { return allLoad() }
-            R.id.allDelete -> { return allDelete() }
-            else -> {return super.onOptionsItemSelected(item)}
+            R.id.allLoad -> { return reLoadShopList() }
+            R.id.allDelete -> { return clearShopList() }
+            else -> { return super.onOptionsItemSelected(item) }
         }
     }
 
-    private fun allLoad(): Boolean{
+    private fun reLoadShopList(): Boolean {
         viewModel.reLoadButtonClick()
         return true
     }
 
-    private fun allDelete(): Boolean{
+    private fun clearShopList(): Boolean {
         viewModel.allDeleteButtonClick()
         binding.mainRecycler.adapter?.notifyDataSetChanged()
         return true

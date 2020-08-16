@@ -1,8 +1,6 @@
 package com.jsh.tenqube.data.source.shop.local
 
 import androidx.room.*
-import com.jsh.tenqube.data.source.shop.local.DataShop.*
-import com.jsh.tenqube.data.source.shop.local.DataShopLabel.LocalShopLabelModel
 
 @Dao
 interface ShopDao{
@@ -40,8 +38,4 @@ interface ShopDao{
     @Transaction
     @Query("DELETE FROM shopLabel")
     fun deleteAllShopLabel()
-
-    @Insert
-    fun updateShopLabels(shopLabel: LocalShopLabelModel)
-
 }

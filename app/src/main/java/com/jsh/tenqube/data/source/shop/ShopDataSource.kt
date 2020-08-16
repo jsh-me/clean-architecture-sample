@@ -1,7 +1,7 @@
 package com.jsh.tenqube.data.source.shop
 
 import com.jsh.tenqube.domain.util.Result
-import com.jsh.tenqube.domain.entity.DomainShop.*
+import com.jsh.tenqube.domain.entity.Shop
 
 interface ShopDataSource {
 
