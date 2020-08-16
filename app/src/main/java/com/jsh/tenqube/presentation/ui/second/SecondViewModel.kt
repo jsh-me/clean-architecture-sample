@@ -1,6 +1,5 @@
 package com.jsh.tenqube.presentation.ui.second
 
-import android.widget.Toast
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,13 +7,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jsh.tenqube.domain.usecase.*
 import com.jsh.tenqube.presentation.SingleLiveEvent
-import com.jsh.tenqube.presentation.entity.PresenterLabelEntity.*
-import com.jsh.tenqube.presentation.entity.PresenterShopEntity
-import com.jsh.tenqube.presentation.mapper.toDomainShop
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.coroutines.coroutineContext
+import com.jsh.tenqube.domain.util.Result
+import com.jsh.tenqube.presentation.entity.PresenterLabel
+import com.jsh.tenqube.presentation.entity.PresenterShop
+import com.jsh.tenqube.presentation.mapper.toDomainShop
+import com.jsh.tenqube.presentation.util.toListLabel
+import com.jsh.tenqube.presentation.util.toStringLabel
 
 class SecondViewModel @ViewModelInject constructor(
     private val updateShopUseCase: UpdateShopUseCase,
@@ -46,45 +46,40 @@ class SecondViewModel @ViewModelInject constructor(
         }
     }
 
-    fun editButtonClicked(){
-        if(!(_shopId.value.isNullOrEmpty() || shopName.value.isNullOrEmpty() || shopUrl.value.isNullOrEmpty() || shopLabels.value.isNullOrEmpty())) {
-            viewModelScope.launch {
-                updateShopUseCase(
-                    PresenterShopEntity.PresenterShop(
-                        shopId = _shopId.value!!,
-                        shopName = shopName.value!!,
-                        shopUrl = shopUrl.value!!,
-                        shopLabel = listOf(PresenterLabel("",shopLabels.value!!))
-                    ).toDomainShop()
-                )
+    fun editButtonClicked() {
+        viewModelScope.launch {
+            updateShopUseCase(
+                PresenterShop(
+                    shopId = _shopId.value!!,
+                    shopName = shopName.value!!,
+                    shopUrl = shopUrl.value!!,
+                    shopLabel = listOf(PresenterLabel("", shopLabels.value!!))
+                ).toDomainShop()
+            ).let {
+                if (it is Result.Success) {
+                    editButtonClicked.value = it.data
+                }
             }
-            editButtonClicked.value = true
-        }
-        else {
-            editButtonClicked.value = false
         }
     }
 
     fun addButtonClicked(){
         val shopUUID = UUID.randomUUID().toString()
-        val labelUUID = UUID.randomUUID().toString()
 
-        if(!(_shopId.value.isNullOrEmpty() || shopName.value.isNullOrEmpty() || shopUrl.value.isNullOrEmpty() || shopLabels.value.isNullOrEmpty())) {
-            viewModelScope.launch {
+        viewModelScope.launch {
                 insertShopUseCase(
-                    PresenterShopEntity.PresenterShop(
+                    PresenterShop(
                         shopName = shopName.value!!,
-                        shopLabel = listOf(PresenterLabel(labelUUID, shopLabels.value!!)),
+                        shopLabel = shopLabels.value?.toListLabel()!!,
                         shopUrl = shopUrl.value!!,
                         shopId = shopUUID
                     ).toDomainShop()
-                )
+                ).let {
+                    if (it is Result.Success) {
+                        addButtonClicked.value = it.data
+                    }
+                }
             }
-            addButtonClicked.value = true
-        }
-        else {
-            addButtonClicked.value = false
-        }
     }
 
     fun addImageButtonClicked(){
@@ -99,10 +94,10 @@ class SecondViewModel @ViewModelInject constructor(
         shopUrl.value = url
     }
 
-    fun setShopInfo(info: ArrayList<String>){
-        _shopId.value = info[0]
-        shopUrl.value = info[1]
-        shopName.value = info[2]
-        shopLabels.value = info[3]
+    fun setShopInfo(shop: PresenterShop){
+        _shopId.value = shop.shopId
+        shopUrl.value = shop.shopUrl
+        shopName.value = shop.shopName
+        shopLabels.value = shop.shopLabel.toStringLabel()
     }
 }

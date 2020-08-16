@@ -8,8 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.jsh.tenqube.domain.usecase.*
 import com.jsh.tenqube.domain.util.Result
 import com.jsh.tenqube.presentation.SingleLiveEvent
-import com.jsh.tenqube.presentation.entity.PresenterLabelEntity.*
-import com.jsh.tenqube.presentation.entity.PresenterShopEntity.*
+import com.jsh.tenqube.presentation.entity.PresenterShop
 import com.jsh.tenqube.presentation.mapper.toPresenterShopList
 import kotlinx.coroutines.*
 
@@ -21,43 +20,39 @@ class FirstViewModel  @ViewModelInject constructor(
     private val _shopAndLabelList = MutableLiveData<List<PresenterShop>>()
     val shopAndLabelList: LiveData<List<PresenterShop>> = _shopAndLabelList
 
-    private val _isUpdated = MutableLiveData<Boolean>()
-    val isUpdated: LiveData<Boolean> = _isUpdated
-
     var addButtonClicked: SingleLiveEvent<Void> = SingleLiveEvent()
-    var openShopListClicked: SingleLiveEvent<ArrayList<String>> = SingleLiveEvent()
+    var openShopListClicked: SingleLiveEvent<PresenterShop> = SingleLiveEvent()
+    var updated: Boolean = true
 
     init {
-        loadShops(true)
-        initData()
+        initData(updated)
     }
 
-    private fun initData() = viewModelScope.launch {
-        getShopsUseCase().let{
+    private fun initData(isUpdated: Boolean) = viewModelScope.launch {
+        getShopsUseCase(isUpdated).let{
             if( it is Result.Success){
                 _shopAndLabelList.value = it.data.toPresenterShopList()
             }
         }
+        updated = false
     }
 
-    fun allLoadButtonClick(){
-        initData()
+    fun reLoadButtonClick(){
+        updated = true
+        initData(updated)
     }
 
     fun allDeleteButtonClick() = viewModelScope.launch {
-        _shopAndLabelList.value = emptyList()
-        deleteAllShopUseCase()
+        deleteAllShopUseCase().let {
+            if(it is Result.Success) _shopAndLabelList.value = emptyList()
+        }
     }
 
-    fun openShopDetails(id: String, url: String, name: String, label: String){
-        openShopListClicked.value = arrayListOf(id, url, name, label)
+    fun openShopDetails(shop: PresenterShop){
+        openShopListClicked.value = shop
     }
 
     fun addButtonClicked(){
         addButtonClicked.call()
-    }
-
-    fun loadShops(update: Boolean){
-        _isUpdated.value = update
     }
 }

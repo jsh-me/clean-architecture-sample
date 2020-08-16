@@ -7,7 +7,7 @@ interface ShopRepository {
 
     suspend fun getShops(isUpdated: Boolean): Result<List<Shop>>
 
-    suspend fun getShopDetails(): Result<List<Shop>>
+    suspend fun getShop(id: String, isUpdated: Boolean): Result<Shop>
 
     suspend fun updateShop(shop: Shop): Result<Unit>
 

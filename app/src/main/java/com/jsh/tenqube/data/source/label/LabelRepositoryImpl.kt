@@ -21,7 +21,7 @@ class LabelRepositoryImpl @Inject constructor(
 
     override suspend fun getLabels(isUpdated: Boolean): Result<List<Label>> {
         return withContext(ioDispatcher) {
-            if(isUpdated) {
+            if(!isUpdated) {
                 cachedLabels?.let { cachedLabels ->
                     return@withContext Success(cachedLabels.values.sortedBy { it.id })
                 }
@@ -33,17 +33,30 @@ class LabelRepositoryImpl @Inject constructor(
             cachedLabels?.values?.let{labels ->
                 return@withContext Success(labels.sortedBy { it.id })
             }
-
-            (newLabels as? Success)?.let{
-                if(it.data.isEmpty()){
-                    return@withContext Success(it.data)
-                }
-            }
             return@withContext Error(Exception("Illegal State"))
         }
     }
 
-    private suspend fun fetchLabels(id: String): Result<Label> {
+    override suspend fun getLabel(id: String, isUpdated: Boolean): Result<Label> {
+        return withContext(ioDispatcher){
+            if(!isUpdated){
+                getLabelById(id)?.let{
+                    return@withContext Success(it)
+                }
+            }
+            val newLabel = fetchLabel(id, isUpdated)
+            (newLabel as? Success)?.let{
+                cacheLabel(it.data)
+                return@withContext Success(getLabelById(id)!!)
+            }
+            return@withContext Error(Exception("Error fetching from remote and local"))
+        }
+    }
+
+    private suspend fun fetchLabel(id: String, isUpdated: Boolean): Result<Label> {
+        val localLabelData = localDataSource.getLabel(id)
+        if( localLabelData is Success) return localLabelData
+
         val remoteLabelData = remoteDataSource.getLabel(id)
 
         when(remoteLabelData){
@@ -54,8 +67,10 @@ class LabelRepositoryImpl @Inject constructor(
             }
             else ->  throw IllegalStateException()
         }
-        val localLabelData = localDataSource.getLabel(id)
-        if( localLabelData is Success) return localLabelData
+
+        if (isUpdated) {
+            return Error(Exception("Refresh failed"))
+        }
         return Error(Exception("Error fetching from remote and local"))
     }
 
@@ -67,25 +82,29 @@ class LabelRepositoryImpl @Inject constructor(
         cachedLabels?.put(label.id, label)
     }
 
-    private suspend fun fetchLabels(isUpdated: Boolean): Result<List<Label>> {
+    private suspend fun fetchLabels(isUpdated: Boolean): Result<List<Label>> = withContext(ioDispatcher) {
+        val localLabelData = localDataSource.getLabels()
+        (localLabelData as? Success)?.let {
+            if(it.data.isNotEmpty())
+                return@withContext localLabelData //로컬에 데이터가 있으면 로컬 데이터를 반환
+        }
+
         val remoteLabelData = remoteDataSource.getLabels()
 
         when ( remoteLabelData ) {
             is Error -> Timber.w("Remote data source fetch failed")
             is Success -> {
                 refreshLocalDataSource(remoteLabelData.data)
-                return remoteLabelData
+                return@withContext remoteLabelData
             }
             else -> throw IllegalStateException()
         }
 
         if (isUpdated) {
-            return Error(Exception("Can't force refresh: remote data source is unavailable"))
+            return@withContext Error(Exception("Can't force refresh: remote data source is unavailable"))
         }
 
-        val localLabelData = localDataSource.getLabels()
-        if( localLabelData is Success) return localLabelData
-        return Error(Exception("Error fetching from remote and local"))
+        return@withContext Error(Exception("Error fetching from remote and local"))
     }
 
     override suspend fun updateLabel(label: Label) {
@@ -114,6 +133,8 @@ class LabelRepositoryImpl @Inject constructor(
     private suspend fun refreshLocalDataSource(label: Label) {
         localDataSource.insertLabel(label)
     }
+
+    private fun getLabelById(id: String) = cachedLabels?.get(id)
 
     private fun refreshCache(labels: List<Label>){
         cachedLabels?.clear()

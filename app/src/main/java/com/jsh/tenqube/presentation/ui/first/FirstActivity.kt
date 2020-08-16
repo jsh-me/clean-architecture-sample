@@ -5,16 +5,17 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jsh.tenqube.R
 import com.jsh.tenqube.databinding.ActivityMainBinding
+import com.jsh.tenqube.presentation.entity.PresenterShop
 import com.jsh.tenqube.presentation.ui.second.SecondActivity
 import com.jsh.tenqube.presentation.util.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import java.io.Serializable
 
 @AndroidEntryPoint
 class FirstActivity : AppCompatActivity() {
@@ -45,13 +46,15 @@ class FirstActivity : AppCompatActivity() {
 
         viewModel.addButtonClicked.observe(this, Observer {
             val intent = Intent(this@FirstActivity, SecondActivity::class.java)
+            intent.putExtra(EXTRA_USER_STATE, false)
             startActivity(intent)
         })
     }
 
-    private fun openShopDetails(shopInfo: ArrayList<String>){
+    private fun openShopDetails(shopInfo: PresenterShop){
         val intent = Intent(this@FirstActivity, SecondActivity::class.java)
-        intent.putExtra("shopInfo", shopInfo)
+        intent.putExtra(EXTRA_USER_STATE, true)
+        intent.putExtra(EXTRA_SHOP_DETAIL, shopInfo as Serializable)
         startActivity(intent)
     }
 
@@ -61,7 +64,6 @@ class FirstActivity : AppCompatActivity() {
             listAdapter = MainAdapter(viewModel)
             binding.mainRecycler.layoutManager = LinearLayoutManager(this)
             binding.mainRecycler.adapter = listAdapter
-            Timber.e("complete")
         } else {
             Timber.e("ViewModel not initialized when attempting to set up adapter.")
         }
@@ -81,12 +83,18 @@ class FirstActivity : AppCompatActivity() {
     }
 
     private fun allLoad(): Boolean{
-        viewModel.allLoadButtonClick()
+        viewModel.reLoadButtonClick()
         return true
     }
+
     private fun allDelete(): Boolean{
         viewModel.allDeleteButtonClick()
         binding.mainRecycler.adapter?.notifyDataSetChanged()
         return true
+    }
+
+    companion object {
+        const val EXTRA_USER_STATE = "userState"
+        const val EXTRA_SHOP_DETAIL = "shopDetail"
     }
 }

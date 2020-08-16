@@ -9,7 +9,7 @@ class GetShopsUseCase (
     private val shopRepository: ShopRepository,
     private val labelRepository: LabelRepository
 ) {
-    suspend operator fun invoke(isUpdated: Boolean = false): Result<List<Shop>> {
+    suspend operator fun invoke(isUpdated: Boolean): Result<List<Shop>> {
 
         return when (labelRepository.getLabels(isUpdated)) {
             is Result.Success -> shopRepository.getShops(isUpdated)

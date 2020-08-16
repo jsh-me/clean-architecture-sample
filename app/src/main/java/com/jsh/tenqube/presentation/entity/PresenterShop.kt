@@ -1,12 +1,10 @@
 package com.jsh.tenqube.presentation.entity
 
-import com.jsh.tenqube.presentation.entity.PresenterLabelEntity.PresenterLabel
+import java.io.Serializable
 
-sealed class PresenterShopEntity {
-    data class PresenterShop(
-        val shopId: String,
-        val shopName: String,
-        val shopUrl: String,
-        val shopLabel: List<PresenterLabel>
-    ): PresenterShopEntity()
-}
+data class PresenterShop(
+    val shopId: String,
+    val shopName: String,
+    val shopUrl: String,
+    val shopLabel: List<PresenterLabel>
+): Serializable

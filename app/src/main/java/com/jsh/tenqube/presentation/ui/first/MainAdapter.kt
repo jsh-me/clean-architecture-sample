@@ -6,9 +6,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.jsh.tenqube.databinding.ItemShopListBinding
-import com.jsh.tenqube.presentation.entity.PresenterLabelEntity.*
-import com.jsh.tenqube.presentation.entity.PresenterShopEntity.*
+import com.jsh.tenqube.presentation.entity.PresenterShop
 import com.jsh.tenqube.presentation.ui.first.MainAdapter.*
+import com.jsh.tenqube.presentation.util.toStringLabel
 import timber.log.Timber
 
 
@@ -34,16 +34,10 @@ class MainAdapter(private val viewModel: FirstViewModel):
 
         fun bind(viewModel: FirstViewModel, item: PresenterShop ) {
 
-            var labelNameList = ""
-
-            item.shopLabel?.map{
-                labelNameList += "#${it.name} "
-            }
-
             binding.shopImage.clipToOutline = true
             binding.viewModel = viewModel
             binding.shop = item
-            binding.label = labelNameList
+            binding.label = item.shopLabel.toStringLabel()
         }
 
         companion object {

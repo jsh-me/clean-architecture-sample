@@ -8,7 +8,7 @@
 
         <variable
             name="shop"
-            type="com.jsh.tenqube.presentation.entity.PresenterShopEntity.PresenterShop" />
+            type="com.jsh.tenqube.presentation.entity.PresenterShop" />
 
         <variable
             name="viewModel"
@@ -24,7 +24,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:onClick="@{() -> viewModel.openShopDetails(shop.shopId, shop.shopUrl, shop.shopName, label)}"
+    android:onClick="@{() -> viewModel.openShopDetails(shop)}"
     xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView

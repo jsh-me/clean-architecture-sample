@@ -7,13 +7,11 @@ interface ShopDataSource {
 
     suspend fun getShops(): Result<List<Shop>>
 
-    suspend fun getShopDetails(): Result<List<Shop>>
+    suspend fun getShop(id: String): Result<Shop>
 
     suspend fun insertShopLabels(shop: Shop)
 
     suspend fun deleteAllShopLabels()
-
-    suspend fun getShop(id: String): Result<Shop>
 
     suspend fun insertShop(shop: Shop): Result<Unit>
 

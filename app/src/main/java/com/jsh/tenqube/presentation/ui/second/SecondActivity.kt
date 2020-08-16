@@ -1,6 +1,5 @@
 package com.jsh.tenqube.presentation.ui.second
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,7 +8,10 @@ import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.jsh.tenqube.R
 import com.jsh.tenqube.databinding.ActivitySubBinding
+import com.jsh.tenqube.presentation.entity.PresenterShop
 import com.jsh.tenqube.presentation.ui.first.FirstActivity
+import com.jsh.tenqube.presentation.ui.first.FirstActivity.Companion.EXTRA_SHOP_DETAIL
+import com.jsh.tenqube.presentation.ui.first.FirstActivity.Companion.EXTRA_USER_STATE
 import com.jsh.tenqube.presentation.util.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,9 +31,11 @@ class SecondActivity : AppCompatActivity() {
         observeData()
     }
 
-    private fun initView(){
-        with(viewModel){
-            setShopInfo(intent.getStringArrayListExtra("shopInfo")?: arrayListOf("","","",""))
+    private fun initView() {
+        if (intent.getBooleanExtra(EXTRA_USER_STATE, false)) {
+            with(viewModel) {
+                setShopInfo(intent.getSerializableExtra(EXTRA_SHOP_DETAIL) as PresenterShop)
+            }
         }
     }
 

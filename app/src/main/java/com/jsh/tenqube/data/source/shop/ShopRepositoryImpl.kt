@@ -26,32 +26,40 @@ class ShopRepositoryImpl @Inject constructor(
         return withContext(ioDispatcher){
             if(!isUpdated) { //서버에서 데이터를 가져올 필요가 없다면 캐시에 있는 데이터를 리턴
                 cachedShops?.let{ cachedShops ->
-                    return@withContext Success(cachedShops.values.sortedBy { it.id })
+                    return@withContext Success(cachedShops.values.sortedBy { it.id }) //메모리 캐싱 리턴
                 }
             }
 
-            val newShops = fetchShops(isUpdated)
-            (newShops as? Success)?.let { refreshCache(it.data) }
+            val newShops = fetchShops(isUpdated) //캐시가 없으면 여기까지 내려오니까, fetchshops에서는 로컬 먼저 불러오고, 로컬에도 없으면 리모트로.
+            (newShops as? Success)?.let { refreshCache(it.data) } //newshop의 결과값을 다시 캐시로 넣음
 
-            cachedShops?.values?.let{ shops ->
+            cachedShops?.values?.let{ shops ->  //그럼 캐시가 생길테니 리턴함
                 return@withContext Success(shops.sortedBy { it.id })
-            }
-
-            (newShops as? Success)?.let{
-                if(it.data.isEmpty()){
-                    return@withContext Success(it.data)
-                }
             }
             return@withContext Error(Exception("Illegal State"))
         }
     }
 
-    //shop과 label의 정보를 모두 가져온다.
-    override suspend fun getShopDetails(): Result<List<Shop>> = withContext(ioDispatcher) {
-        return@withContext localDataSource.getShopDetails()
+    override suspend fun getShop(id: String, isUpdated: Boolean): Result<Shop> {
+        return withContext(ioDispatcher){
+            if(!isUpdated) {
+               getShopById(id)?.let{
+                   return@withContext Success(it)
+               }
+            }
+            val newShop = fetchShop(id, isUpdated)
+            (newShop as? Success)?.let{
+                cacheShop(it.data)
+                return@withContext Success(getShopById(id)!!)
+            }
+            return@withContext Error(Exception("Error fetching from remote and local"))
+        }
     }
 
-    private suspend fun fetchShops(id: String): Result<Shop> {
+    private suspend fun fetchShop(id: String, isUpdated: Boolean): Result<Shop> {
+        val localShopData = localDataSource.getShop(id)
+        if( localShopData is Success) return localShopData
+
         val remoteShopData = remoteDataSource.getShop(id)
 
         when( remoteShopData ){
@@ -63,8 +71,10 @@ class ShopRepositoryImpl @Inject constructor(
             else ->  throw IllegalStateException()
         }
 
-        val localShopData = localDataSource.getShop(id)
-        if( localShopData is Success) return localShopData
+        if (!isUpdated) {
+            return Error(Exception("Refresh failed"))
+        }
+
         return Error(Exception("Error fetching from remote and local"))
     }
 
@@ -136,12 +146,19 @@ class ShopRepositoryImpl @Inject constructor(
     }
 
     private suspend fun fetchShops(isUpdated: Boolean): Result<List<Shop>>  = withContext(ioDispatcher) {
-        val remoteShopData = remoteDataSource.getShops()
+        val localShopData = localDataSource.getShops()
+
+        (localShopData as? Success)?.let {
+            if(it.data.isNotEmpty())
+            return@withContext localShopData //로컬에 데이터가 있으면 로컬 데이터를 반환
+        }
+
+        val remoteShopData = remoteDataSource.getShops() //리모트 데이터 가져옴.
 
         when( remoteShopData ){
             is Error -> Timber.w("Remote data source fetch failed")
             is Success -> {
-                refreshLocalDataSource(remoteShopData.data)
+                refreshLocalDataSource(remoteShopData.data) //local에 remote 데이터를 넣음
                 return@withContext remoteShopData
             }
             else ->  throw IllegalStateException()
@@ -151,8 +168,6 @@ class ShopRepositoryImpl @Inject constructor(
             return@withContext Error(Exception("Can't force refresh: remote data source is unavailable"))
         }
 
-        val localShopData = localDataSource.getShops()
-        if( localShopData is Success) return@withContext localShopData
         return@withContext Error(Exception("Error fetching from remote and local"))
     }
 
@@ -170,6 +185,8 @@ class ShopRepositoryImpl @Inject constructor(
             localDataSource.insertShopLabels(shop)
         }
     }
+
+    private fun getShopById(id: String) = cachedShops?.get(id)
 
     private suspend fun refreshLocalDataSource(shop: Shop) = withContext(ioDispatcher){
         localDataSource.insertShop(shop)

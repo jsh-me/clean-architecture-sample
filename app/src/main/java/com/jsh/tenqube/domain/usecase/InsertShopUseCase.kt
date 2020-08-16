@@ -10,10 +10,15 @@ class InsertShopUseCase (
     private val shopRepository: ShopRepository,
     private val labelRepository: LabelRepository
 ){
-    suspend operator fun invoke(shop: Shop): Result<Unit> {
-        shop.labels.map{
-            labelRepository.insertLabel(Label(it.id, it.name))
-        }
-        return shopRepository.insertShop(shop)
+    suspend operator fun invoke(shop: Shop): Result<Boolean> {
+
+        return if(!(shop.id.isNullOrEmpty() || shop.imgUrl.isNullOrEmpty() || shop.name.isNullOrEmpty() || shop.labels.isNullOrEmpty())){
+            shop.labels.map{
+                labelRepository.insertLabel(Label(it.id, it.name))
+            }
+            shopRepository.insertShop(shop)
+            Result.Success(true)
+        } else
+            Result.Success(false)
     }
 }

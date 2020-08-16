@@ -8,6 +8,8 @@ interface LabelRepository {
 
     suspend fun getLabels(isUpdated: Boolean): Result<List<Label>>
 
+    suspend fun getLabel(id: String, isUpdated: Boolean): Result<Label>
+
     suspend fun updateLabel(label: Label)
 
     suspend fun deleteAllLabel()

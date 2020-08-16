@@ -22,12 +22,6 @@ fun List<LocalLabelModel>.toLocalDomainLabelList(): List<Label>{
     }
 }
 
-fun List<DataShop.LocalShopModel>.toLocalDomainShopList(): List<Shop>{
-    return this.map{
-        Shop(it.id, it.shopName, it.shopUrl, arrayListOf())
-    }
-}
-
 fun LocalLabelModel.toDomainLabel(): Label {
     return Label(this.id, this.name)
 }

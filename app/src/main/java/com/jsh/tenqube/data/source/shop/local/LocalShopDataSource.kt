@@ -11,6 +11,7 @@ import com.jsh.tenqube.domain.util.Result.*
 import kotlinx.coroutines.*
 import timber.log.Timber
 import java.lang.Exception
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
@@ -21,8 +22,12 @@ class LocalShopDataSource @Inject constructor(
 
     override suspend fun getShops(): Result<List<Shop>> = withContext(ioDispatcher) {
         return@withContext try {
-            Success(shopDao.getShops().toLocalDomainShopList())
-        } catch (e: Exception) {
+            shopDao.getShopWithAllLabel().let {
+                return@withContext Success(it.map {
+                    Shop(it.shop.id, it.shop.shopName, it.shop.shopUrl, it.shopLabels.toLocalDomainLabelList())
+                })
+            }
+        } catch (e: EmptyStackException) {
             Error(e)
         }
     }
@@ -32,18 +37,6 @@ class LocalShopDataSource @Inject constructor(
             Success(shopDao.getShopById(id).toLocalDomainShop())
         } catch (e: Exception) {
             Error(e)
-        }
-    }
-
-    override suspend fun getShopDetails(): Result<List<Shop>> = withContext(ioDispatcher) {
-        shopDao.getShopWithAllLabel().let {
-            return@withContext Success(it.map {
-                Shop(
-                    it.shop.id,
-                    it.shop.shopName,
-                    it.shop.shopUrl,
-                    it.shopLabels.toLocalDomainLabelList())
-            })
         }
     }
 
