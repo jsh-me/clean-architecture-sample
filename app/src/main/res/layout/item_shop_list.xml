@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+
+        <variable
+            name="label"
+            type="java.lang.String" />
+
+        <variable
+            name="shop"
+            type="com.jsh.practice.presentation.entity.PresenterShop" />
+
+        <variable
+            name="viewModel"
+            type="com.jsh.practice.presentation.ui.first.FirstViewModel" />
+    </data>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/mainConstraint"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginTop="16dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:onClick="@{() -> viewModel.openShopDetails(shop)}"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ImageView
+        android:id="@+id/shopImage"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:background="@drawable/background_rounding"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        bindImage="@{shop.shopUrl}"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/shopName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:textStyle="bold"
+        android:layout_marginTop="5dp"
+        android:lineSpacingExtra="2sp"
+        android:textColor="@color/color1"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@+id/shopImage"
+        app:layout_constraintTop_toTopOf="@+id/shopImage"
+        android:text="@{shop.shopName}"
+        tools:text="Chinti &amp; Parker UK" />
+
+    <TextView
+        android:id="@+id/labelName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="@{label}"
+        android:textColor="#afaece"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/shopName"
+        app:layout_constraintTop_toBottomOf="@+id/shopName"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </layout>
