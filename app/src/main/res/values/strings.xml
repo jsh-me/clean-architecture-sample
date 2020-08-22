@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">practice</string>
+
+    <string name="testImage">https://gomst-images.s3.us-west-2.amazonaws.com/products/625f18cd572b1df1370e5f59f4c6bce3_o</string>
+</resources>
