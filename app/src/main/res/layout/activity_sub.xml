@@ -5,7 +5,7 @@
     <data>
         <variable
             name="subViewModel"
-            type="com.jsh.tenqube.presentation.ui.second.SecondViewModel" />
+            type="com.jsh.practice.presentation.ui.second.SecondViewModel" />
 
         <variable
             name="view"
